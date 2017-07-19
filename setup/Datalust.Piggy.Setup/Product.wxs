@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?ifndef Version?>
+<?define Version = "0.0.0" ?>
+<?endif ?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Product Id="*" Name="Piggy" Language="1033" Version="$(var.Version).0"
+           Manufacturer="Datalust Pty Ltd" UpgradeCode="803b41e9-3199-4493-a761-510158b561ee">
+
+    <Package InstallerVersion="200"
+             Platform="x64"
+             Compressed="yes"
+             InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Property Id="PREVIOUSVERSIONSINSTALLED" Secure="yes" />
+
+    <WixVariable Id="WixUIDialogBmp" Value="WixUIDialogBmp.bmp" />
+    <WixVariable Id="WixUIBannerBmp" Value="WixUIBannerBmp.bmp" />
+    <WixVariable Id="WixUILicenseRtf" Value="..\..\asset\PiggyLicense.rtf" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <Icon Id="Piggy.ico" SourceFile="..\..\asset\Piggy-Icon-128px.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="Piggy.ico" />
+
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+    </UI>
+
+    <Feature Id="ProductFeature" Title="Piggy" Level="1">
+      <ComponentGroupRef Id="Piggy_Project" />
+      <ComponentGroupRef Id="Piggy_Exe" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="INSTALLFOLDER" Name="Piggy" />
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="Piggy_Exe">
+      <Component Id="PiggyPathEntry" Directory="INSTALLFOLDER" Guid="91667E49-C1EF-4DA5-ABD0-4A3413D91667">
+        <CreateFolder/>
+        <RemoveFile Id="InstallState" On="uninstall" Name="piggy.InstallState" />
+        <Environment
+          Id="PATH"
+          Name="PATH"
+          Value="[INSTALLFOLDER]"
+          Permanent="yes"
+          Part="last"
+          Action="set"
+          System="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
