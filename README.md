@@ -2,3 +2,48 @@
 
 A friendly PostgreSQL script runner in the spirit of [DbUp](https://github.com/DbUp/DbUp).
 
+### What is Piggy?
+
+Piggy is a command-line tool for managing schema and data changes to PostgreSQL databases. Piggy looks for `.sql` files in a directory and applies them to the database in order, using transactions and a change log table to ensure each script runs only once per database.
+
+### Installation
+
+Piggy is available as a Windows MSI installer from [the releases page](https://github.com/datalust/piggy/releases). Linux and macOS are supported, but currently require the `Datalust.Piggy` project in this repository to be built from source.
+
+### Organizing change scripts
+
+Your `.sql` files should be named so that they will sort lexicographically in the order they need to be executed:
+
+```
+001-create-schema.sql
+002-create-users-table.sql
+003-...
+```
+
+If the scripts are arranged in subfolders, these can be ordered as well:
+
+```
+v1/
+  001-create-schema.sql
+  002-create-users-table.sql
+  003-...
+v2/
+  001-rename-users-table.sql
+```
+### Applying scripts
+
+Scripts must be applied starting from a _script root_. Piggy searches for `.sql` files and generates script names like `/v1/001-create-schema.sql` using each script's filename relative to the script root. These relative filenames are checked against the change log table to determine which of them need to be run.
+
+The script root is specified with `-s`. Other parameters identify the database server host, the database name, username and password:
+
+```
+piggy apply -s <scripts> -h <host> -d <database> -u <username> -p <password>
+```
+
+If the database does not exist, Piggy will create it using sensible defaults. To opt out of this behavior, add the `--no-create` flag.
+
+For more detailed usage information, run `piggy help apply`; to see all available commands run `piggy help`.
+
+### Change log
+
+The change log is stored in the target database in `piggy.changes`. The `piggy log` command can be used to view applied change scripts.
