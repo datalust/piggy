@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Datalust.Piggy.Cli;
+using Serilog;
 
 namespace Datalust.Piggy
 {
@@ -13,7 +14,9 @@ namespace Datalust.Piggy
             using (var container = builder.Build())
             {
                 var clh = container.Resolve<CommandLineHost>();
-                return clh.Run(args);
+                var exit = clh.Run(args);
+                Log.CloseAndFlush();
+                return exit;
             }
         }
     }
