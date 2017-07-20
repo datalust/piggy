@@ -30,6 +30,17 @@ v1/
 v2/
   001-rename-users-table.sql
 ```
+
+Each script is just regular SQL with any DDL or DML statements required to make a change to the database.
+
+Piggy wraps each script in a transaction; a few DDL statements can't run within a transaction in PostgreSQL - in these cases, add:
+
+```sql
+-- PIGGY NO TRANSACTION
+```
+
+as the first line of the script.
+
 ### Applying scripts
 
 Scripts must be applied starting from a _script root_. Piggy searches for `.sql` files and generates script names like `/v1/001-create-schema.sql` using each script's filename relative to the script root. These relative filenames are checked against the change log table to determine which of them need to be run.
