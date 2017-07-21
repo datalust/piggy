@@ -64,7 +64,7 @@ as the first line of the script.
 Piggy uses `$var$` syntax for replaced variables:
 
 ```sql
-create table $schema$.users;
+create table $schema$.users (name varchar(140) not null);
 insert into users (name) values ('$admin$');
 ```
 
