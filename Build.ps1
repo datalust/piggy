@@ -34,6 +34,7 @@ function Update-WixVersion($version)
 function Execute-MSBuild
 {
 	& msbuild ./piggy.sln /t:Rebuild /p:Configuration=Release /p:Platform=x64
+    if($LASTEXITCODE -ne 0) { exit 2 }
 }
 
 function Execute-Tests
