@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using System;
+using Serilog;
 using Serilog.Events;
 
 namespace Datalust.Piggy.Cli.Features
@@ -19,11 +20,12 @@ namespace Datalust.Piggy.Cli.Features
         {
             var loggerConfiguration = new LoggerConfiguration()
                 .MinimumLevel.Is(_level)
+                .Enrich.WithProperty("Application", "Piggy")
+                .Enrich.WithProperty("Invocation", Guid.NewGuid())
                 .WriteTo.Console();
 
             if (!string.IsNullOrWhiteSpace(_serverUrl))
                 loggerConfiguration
-                    .Enrich.WithProperty("Application", "Piggy")
                     .WriteTo.Seq(_serverUrl, apiKey: _apiKey);
 
             Log.Logger = loggerConfiguration.CreateLogger();
