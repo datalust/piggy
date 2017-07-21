@@ -8,8 +8,9 @@
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>piggy</OutputName>
     <OutputType>Package</OutputType>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\WiX Toolset\v4\wix.targets</WixTargetsPath>
-    <WixToolPath Condition=" '$(WixToolPath)' == '' ">C:\Program Files (x86)\WiX Toolset v4.0\bin</WixToolPath>
+    <WixToolPath>..\..\build\wix\</WixToolPath>
+    <WixTargetsPath>$(WixToolPath)Wix.targets</WixTargetsPath>
+    <WixTasksPath>$(WixToolPath)wixtasks.dll</WixTasksPath>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
