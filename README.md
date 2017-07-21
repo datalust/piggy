@@ -2,6 +2,8 @@
 
 A friendly PostgreSQL script runner in the spirit of [DbUp](https://github.com/DbUp/DbUp).
 
+[![Build status](https://ci.appveyor.com/api/projects/status/889gkdpvjbjuhkfg?svg=true)](https://ci.appveyor.com/project/datalust/piggy)
+
 ### What is Piggy?
 
 Piggy is a simple command-line tool for managing schema and data changes to PostgreSQL databases. Piggy looks for `.sql` files in a directory and applies them to the database in order, using transactions and a change log table to ensure each script runs only once per database.
