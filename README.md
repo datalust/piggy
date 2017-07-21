@@ -33,14 +33,6 @@ v2/
 
 Each script is just regular SQL with any DDL or DML statements required to make a change to the database.
 
-Piggy wraps each script in a transaction; a few DDL statements can't run within a transaction in PostgreSQL - in these cases, add:
-
-```sql
--- PIGGY NO TRANSACTION
-```
-
-as the first line of the script.
-
 ### Applying scripts
 
 Scripts must be applied starting from a _script root_. Piggy searches for `.sql` files and generates script names like `/v1/001-create-schema.sql` using each script's filename relative to the script root. These relative filenames are checked against the change log table to determine which of them need to be run.
@@ -54,6 +46,33 @@ piggy apply -s <scripts> -h <host> -d <database> -u <username> -p <password>
 If the database does not exist, Piggy will create it using sensible defaults. To opt out of this behavior, add the `--no-create` flag.
 
 For more detailed usage information, run `piggy help apply`; to see all available commands run `piggy help`.
+
+### Transactions
+
+Piggy wraps each script in a transaction that also covers the change log table update. A few DDL statements can't run within a transaction in PostgreSQL - in these cases, add:
+
+```sql
+-- PIGGY NO TRANSACTION
+```
+
+as the first line of the script.
+
+### Variable substitution
+
+Piggy uses `$var$` syntax for replaced variables:
+
+```sql
+create table $schema$.users;
+insert into users (name) values ($admin$);
+```
+
+Values are inserted using pure text substitution: no escaping or other processing is applied. If no value is supplied for a variable that appears in a script, Piggy will leave the script unchanged (undefined variables will not be replaced with the empty string).
+
+Variables are supplied on the command-line with the `-v` flag:
+
+```
+piggy apply ... -v schema=myapp -v admin=myuser
+```
 
 ### Change log
 
