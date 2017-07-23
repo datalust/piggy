@@ -47,10 +47,37 @@ function Execute-Tests
     popd
 }
 
-function Publish-Artifacts($version)
+function Create-ArtifactDir
 {
 	mkdir ./artifacts
-	mv ./setup/Datalust.Piggy.Setup/bin/Release/piggy.msi ./artifacts/piggy-$version-pre.msi
+}
+
+function Publish-Gzips($version)
+{
+	$rids = @("ubuntu.14.04-x64", "ubuntu.16.04-x64", "rhel.7-x64", "osx.10.12-x64")
+	foreach ($rid in $rids) {
+		& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -r $rid
+	    if($LASTEXITCODE -ne 0) { exit 3 }
+	
+		# Make sure the archive contains a reasonable root filename
+		mv ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/publish/ ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/piggy-$version-$rid/
+
+		& ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/piggy-$version-$rid/
+		if($LASTEXITCODE -ne 0) { exit 3 }
+
+		# Back to the original directory name
+		mv ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/piggy-$version-$rid/ ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/publish/
+		
+		& ./build/7-zip/7za.exe a -tgzip ./artifacts/piggy-$version-$rid.tar.gz piggy-$version-$rid.tar
+		if($LASTEXITCODE -ne 0) { exit 3 }
+
+		rm piggy-$version-$rid.tar
+	}
+}
+
+function Publish-Msi($version)
+{
+	mv ./setup/Datalust.Piggy.Setup/bin/Release/piggy.msi ./artifacts/piggy-$version.msi
 }
 
 Push-Location $PSScriptRoot
@@ -63,6 +90,8 @@ Update-AssemblyInfo($version)
 Update-WixVersion($version)
 Execute-MSBuild
 Execute-Tests
-Publish-Artifacts($version)
+Create-ArtifactDir
+Publish-Gzips($version)
+Publish-Msi($version)
 
 Pop-Location
