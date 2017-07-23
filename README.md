@@ -2,7 +2,7 @@
 
 A friendly PostgreSQL script runner in the spirit of [DbUp](https://github.com/DbUp/DbUp).
 
-[![Build status](https://ci.appveyor.com/api/projects/status/889gkdpvjbjuhkfg?svg=true)](https://ci.appveyor.com/project/datalust/piggy)
+[![Build status](https://ci.appveyor.com/api/projects/status/889gkdpvjbjuhkfg?svg=true)](https://ci.appveyor.com/project/datalust/piggy)  [![Join the chat at https://gitter.im/datalust/piggy](https://img.shields.io/gitter/room/datalust/piggy.svg)](https://gitter.im/datalust/piggy)
 
 ### What is Piggy?
 
@@ -10,11 +10,13 @@ Piggy is a simple command-line tool for managing schema and data changes to Post
 
 ### Installation
 
-Piggy is available as a Windows MSI installer from [the releases page](https://github.com/datalust/piggy/releases). Linux and macOS are supported, but currently require the `Datalust.Piggy` project in this repository to be built from source.
+Piggy is available for Windows, macOS and Linux from [the releases page](https://github.com/datalust/piggy/releases). Download the MSI or archive file for [your platform](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog). If your platform of choice isn't listed, please [raise an issue here](https://github.com/datalust/piggy/issues) so that we can add it.
 
-### Organizing change scripts
+### Workflow
 
-Your `.sql` files should be named so that they will sort lexicographically in the order they need to be executed:
+To manage database updates with Piggy, write SQL scripts to make changes, rather than applying changes directly.
+
+Organize change scripts on the file system under a _script root_ directory. Name files so that they sort lexicographically in the order in which they need to be executed:
 
 ```
 001-create-schema.sql
@@ -22,7 +24,7 @@ Your `.sql` files should be named so that they will sort lexicographically in th
 003-...
 ```
 
-If the scripts are arranged in subfolders, these can be ordered as well:
+If the scripts are arranged in subdirectories, these must be ordered by name as well:
 
 ```
 v1/
@@ -33,21 +35,21 @@ v2/
   001-rename-users-table.sql
 ```
 
-Each script is just regular SQL with any DDL or DML statements required to make a change to the database.
+Piggy enumerates `.sql` files and generates names like `/v1/001-create-schema.sql` using each script's filename relative to the script root. These relative names are checked against the change log table to determine which of them need to be run.
 
-### Applying scripts
-
-Scripts must be applied starting from a _script root_. Piggy searches for `.sql` files and generates script names like `/v1/001-create-schema.sql` using each script's filename relative to the script root. These relative filenames are checked against the change log table to determine which of them need to be run.
-
-The script root is specified with `-s`. Other parameters identify the database server host, the database name, username and password:
+To bring a database up to date, run `piggy up`, providing the script root, host, database name, username and password:
 
 ```
-piggy apply -s <scripts> -h <host> -d <database> -u <username> -p <password>
+piggy up -s <scripts> -h <host> -d <database> -u <username> -p <password>
 ```
 
 If the database does not exist, Piggy will create it using sensible defaults. To opt out of this behavior, add the `--no-create` flag.
 
-For more detailed usage information, run `piggy help apply`; to see all available commands run `piggy help`.
+Over time, as your application grows, create new scripts to move the database forwards - don't edit the existing ones, since they've already been applied and will be ignored by Piggy.
+
+Piggy can be used to update from any previous schema version to the current one: scripts that have already been run on a database are ignored, so only necessary scripts are applied.
+
+For more detailed usage information, run `piggy help up`; to see all available commands run `piggy help`.
 
 ### Transactions
 
@@ -64,7 +66,7 @@ as the first line of the script.
 Piggy uses `$var$` syntax for replaced variables:
 
 ```sql
-create table $schema$.users;
+create table $schema$.users (name varchar(140) not null);
 insert into users (name) values ('$admin$');
 ```
 
@@ -73,9 +75,9 @@ Values are inserted using pure text substitution: no escaping or other processin
 Variables are supplied on the command-line with the `-v` flag:
 
 ```
-piggy apply ... -v schema=myapp -v admin=myuser
+piggy up ... -v schema=myapp -v admin=myuser
 ```
 
 ### Change log
 
-The change log is stored in the target database in `piggy.changes`. The `piggy log` command can be used to view applied change scripts.
+The change log is stored in the target database in `piggy.changes`. The `piggy log` command is used to view applied change scripts.
