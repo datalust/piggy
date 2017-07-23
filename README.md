@@ -10,7 +10,7 @@ Piggy is a simple command-line tool for managing schema and data changes to Post
 
 ### Installation
 
-Piggy is available as a Windows MSI installer from [the releases page](https://github.com/datalust/piggy/releases). Linux and macOS are supported, but currently require the `Datalust.Piggy` project in this repository to be built from source.
+Piggy is available for Windows, macOS and Linux from [the releases page](https://github.com/datalust/piggy/releases). Download the MSI or archive file for [your platform](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog). If your platform of choice isn't listed, please [raise an issue here](https://github.com/datalust/piggy/issues) so that we can add it.
 
 ### Organizing change scripts
 
@@ -33,7 +33,7 @@ v2/
   001-rename-users-table.sql
 ```
 
-Each script is just regular SQL with any DDL or DML statements required to make a change to the database.
+Each script is just regular SQL with any DDL or DML statements required to make a change to the database. Over time, as your application grows, create new scripts to move the database forwards.
 
 ### Applying scripts
 
