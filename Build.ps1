@@ -59,8 +59,14 @@ function Publish-Gzips($version)
 		& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -r $rid
 	    if($LASTEXITCODE -ne 0) { exit 3 }
 	
-		& ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/publish/*
+		# Make sure the archive contains a reasonable root filename
+		mv ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/publish/ ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/piggy-$version-$rid/
+
+		& ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/piggy-$version-$rid/
 		if($LASTEXITCODE -ne 0) { exit 3 }
+
+		# Back to the original directory name
+		mv ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/piggy-$version-$rid/ ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/publish/
 		
 		& ./build/7-zip/7za.exe a -tgzip ./artifacts/piggy-$version-$rid.tar.gz piggy-$version-$rid.tar
 		if($LASTEXITCODE -ne 0) { exit 3 }
