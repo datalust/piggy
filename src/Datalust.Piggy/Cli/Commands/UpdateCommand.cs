@@ -5,8 +5,8 @@ using Serilog;
 
 namespace Datalust.Piggy.Cli.Commands
 {
-    [Command("apply", "Apply a set of database change scripts")]
-    class ApplyCommand : Command
+    [Command("up", "Bring a database up to date")]
+    class UpdateCommand : Command
     {
         readonly DefineVariablesFeature _defineVariablesFeature;
         readonly UsernamePasswordFeature _usernamePasswordFeature;
@@ -16,7 +16,7 @@ namespace Datalust.Piggy.Cli.Commands
         string _scriptRoot;
         bool _createIfMissing = true;
 
-        public ApplyCommand()
+        public UpdateCommand()
         {
             _databaseFeature = Enable<DatabaseFeature>();
             _usernamePasswordFeature = Enable<UsernamePasswordFeature>();
@@ -44,7 +44,7 @@ namespace Datalust.Piggy.Cli.Commands
 
             try
             {
-                ApplySession.ApplyChangeScripts(
+                UpdateSession.ApplyChangeScripts(
                     _databaseFeature.Host, _databaseFeature.Database, _usernamePasswordFeature.Username, _usernamePasswordFeature.Password,
                     _createIfMissing, _scriptRoot, _defineVariablesFeature.Variables);
 

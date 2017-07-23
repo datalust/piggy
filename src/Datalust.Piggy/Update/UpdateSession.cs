@@ -10,7 +10,7 @@ using Serilog;
 
 namespace Datalust.Piggy.Apply
 {
-    static class ApplySession
+    static class UpdateSession
     {
         public static void ApplyChangeScripts(string host, string database, string username, string password,
             bool createIfMissing, string scriptRoot, IReadOnlyDictionary<string, string> variables)
