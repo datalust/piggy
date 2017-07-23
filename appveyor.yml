@@ -5,7 +5,7 @@ build_script:
 - ps: ./Build.ps1
 test: off
 artifacts:
-- path: artifacts/piggy-.*.msi
+- path: artifacts/piggy-*.msi
 - path: artifacts/piggy-*.tar.gz
 deploy:
 - provider: GitHub
