@@ -8,9 +8,15 @@ namespace Datalust.Piggy.Cli.Commands
     {
         protected override int Run()
         {
-            var version = typeof(VersionCommand).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            var version = GetVersion();
             Console.WriteLine(version);
             return 0;
+        }
+
+        public static string GetVersion()
+        {
+            return typeof(VersionCommand).GetTypeInfo().Assembly
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         }
     }
 }
