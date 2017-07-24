@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?ifndef Version?>
-<?define Version = "0.0.0" ?>
+<?define Version = "99.99.99" ?>
 <?endif ?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">

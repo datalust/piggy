@@ -47,7 +47,6 @@
     <Error Text="The WiX Toolset v4 build tools must be installed to build this project. To download the WiX Toolset v4, see http://wixtoolset.org/releases/" />
   </Target>
   <Target Name="BeforeBuild">
-    <Exec Command="dotnet publish ..\..\src\Datalust.Piggy\Datalust.Piggy.csproj -c $(Configuration) -r win10-x64" />
     <PropertyGroup>
       <LinkerBaseInputPaths>..\..\src\Datalust.Piggy\bin\$(Configuration)\netcoreapp1.1\win10-x64\publish</LinkerBaseInputPaths>
       <DefineConstants>BasePath=..\..\src\Datalust.Piggy\bin\$(Configuration)\netcoreapp1.1\win10-x64\publish</DefineConstants>

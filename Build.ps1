@@ -8,18 +8,6 @@ function Restore-Packages
 	& dotnet restore
 }
 
-function Update-AssemblyInfo($version)
-{  
-    $versionPattern = "[0-9]+(\.([0-9]+|\*)){3}"
-
-    foreach ($file in ls ./src/*/Properties/AssemblyInfo.cs)  
-    {     
-        (cat $file) | foreach {  
-                % {$_ -replace $versionPattern, "$version.0" }             
-            } | sc -Encoding "UTF8" $file                                 
-    }  
-}
-
 function Update-WixVersion($version)
 {
     $defPattern = "define Version = ""0\.0\.0"""
@@ -31,20 +19,16 @@ function Update-WixVersion($version)
         } | sc -Encoding "UTF8" $product
 }
 
-function Execute-MSBuild
+function Execute-MSBuild($version)
 {
-	& msbuild ./piggy.sln /t:Rebuild /p:Configuration=Release /p:Platform=x64
+	& msbuild ./piggy.sln /t:Rebuild /p:Configuration=Release /p:Platform=x64 /p:VersionPrefix=$version
     if($LASTEXITCODE -ne 0) { exit 2 }
 }
 
 function Execute-Tests
 {
-    pushd ./test/Datalust.Piggy.Tests
-
-    & dotnet test -c Release
+    & dotnet test ./test/Datalust.Piggy.Tests/Datalust.Piggy.Tests.csproj -c Release /p:Configuration=Release /p:Platform=x64 /p:VersionPrefix=$version
     if($LASTEXITCODE -ne 0) { exit 3 }
-
-    popd
 }
 
 function Create-ArtifactDir
@@ -56,20 +40,20 @@ function Publish-Gzips($version)
 {
 	$rids = @("ubuntu.14.04-x64", "ubuntu.16.04-x64", "rhel.7-x64", "osx.10.12-x64")
 	foreach ($rid in $rids) {
-		& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -r $rid
-	    if($LASTEXITCODE -ne 0) { exit 3 }
+		& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -r $rid /p:VersionPrefix=$version
+	    if($LASTEXITCODE -ne 0) { exit 4 }
 	
 		# Make sure the archive contains a reasonable root filename
 		mv ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/publish/ ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/piggy-$version-$rid/
 
 		& ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/piggy-$version-$rid/
-		if($LASTEXITCODE -ne 0) { exit 3 }
+		if($LASTEXITCODE -ne 0) { exit 5 }
 
 		# Back to the original directory name
 		mv ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/piggy-$version-$rid/ ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/publish/
 		
 		& ./build/7-zip/7za.exe a -tgzip ./artifacts/piggy-$version-$rid.tar.gz piggy-$version-$rid.tar
-		if($LASTEXITCODE -ne 0) { exit 3 }
+		if($LASTEXITCODE -ne 0) { exit 6 }
 
 		rm piggy-$version-$rid.tar
 	}
@@ -77,18 +61,24 @@ function Publish-Gzips($version)
 
 function Publish-Msi($version)
 {
+	& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -r win10-x64 /p:VersionPrefix=$version
+	if($LASTEXITCODE -ne 0) { exit 7 }
+
+	& msbuild ./setup/Datalust.Piggy.Setup/Datalust.Piggy.Setup.wixproj /t:Rebuild /p:Configuration=Release /p:Platform=x64 /p:Version=$version
+	if($LASTEXITCODE -ne 0) { exit 8 }
+
 	mv ./setup/Datalust.Piggy.Setup/bin/Release/piggy.msi ./artifacts/piggy-$version.msi
 }
 
 Push-Location $PSScriptRoot
 
-$version = @{ $true = $env:APPVEYOR_BUILD_VERSION; $false = "0.0.0" }[$env:APPVEYOR_BUILD_VERSION -ne $NULL];
+$version = @{ $true = $env:APPVEYOR_BUILD_VERSION; $false = "99.99.99" }[$env:APPVEYOR_BUILD_VERSION -ne $NULL];
+Write-Output "Building version $version"
 
 Clean-Output
 Restore-Packages
-Update-AssemblyInfo($version)
 Update-WixVersion($version)
-Execute-MSBuild
+Execute-MSBuild($version)
 Execute-Tests
 Create-ArtifactDir
 Publish-Gzips($version)
