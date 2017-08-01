@@ -1,6 +1,7 @@
 ﻿using System;
-using Datalust.Piggy.Apply;
 using Datalust.Piggy.Cli.Features;
+using Datalust.Piggy.Update;
+using Npgsql;
 using Serilog;
 
 namespace Datalust.Piggy.Cli.Commands
@@ -49,6 +50,11 @@ namespace Datalust.Piggy.Cli.Commands
                     _createIfMissing, _scriptRoot, _defineVariablesFeature.Variables);
 
                 return 0;
+            }
+            catch (PostgresException ex)
+            {
+                Log.Fatal("Could not apply change scripts: {Message} ({SqlState})", ex.MessageText, ex.SqlState);
+                return -1;
             }
             catch (Exception ex)
             {

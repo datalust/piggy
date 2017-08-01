@@ -67,7 +67,7 @@ Piggy uses `$var$` syntax for replaced variables:
 
 ```sql
 create table $schema$.users (name varchar(140) not null);
-insert into users (name) values ('$admin$');
+insert into $schema$.users (name) values ('$admin$');
 ```
 
 Values are inserted using pure text substitution: no escaping or other processing is applied. If no value is supplied for a variable that appears in a script, Piggy will leave the script unchanged (undefined variables will not be replaced with the empty string).
