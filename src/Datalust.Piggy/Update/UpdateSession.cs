@@ -8,7 +8,7 @@ using Datalust.Piggy.Syntax;
 using Npgsql;
 using Serilog;
 
-namespace Datalust.Piggy.Apply
+namespace Datalust.Piggy.Update
 {
     static class UpdateSession
     {

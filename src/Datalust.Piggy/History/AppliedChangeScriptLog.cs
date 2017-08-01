@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Datalust.Piggy.Apply;
+using Datalust.Piggy.Update;
 using Npgsql;
 using Serilog;
 
