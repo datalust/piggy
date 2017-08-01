@@ -1,4 +1,4 @@
-namespace Datalust.Piggy.Apply
+namespace Datalust.Piggy.Update
 {
     class ChangeScriptFile
     {

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace Datalust.Piggy.Apply
+namespace Datalust.Piggy.Update
 {
     static class ChangeScriptFileEnumerator
     {
