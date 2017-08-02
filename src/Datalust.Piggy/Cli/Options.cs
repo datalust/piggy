@@ -150,7 +150,7 @@ namespace NDesk.Options
 namespace Datalust.Piggy.Cli
 #endif
 {
-    public delegate U Converter<T, U>(T t);
+    delegate U Converter<T, U>(T t);
 
     static class StringCoda {
 
@@ -234,7 +234,7 @@ namespace Datalust.Piggy.Cli
 		}
 	}
 
-	public class OptionValueCollection : IList, IList<string> {
+	class OptionValueCollection : IList, IList<string> {
 
 		List<string> values = new List<string> ();
 		OptionContext c;
@@ -324,7 +324,7 @@ namespace Datalust.Piggy.Cli
 		}
 	}
 
-	public class OptionContext {
+	class OptionContext {
 		private Option                option;
 		private string                name;
 		private int                   index;
@@ -361,13 +361,13 @@ namespace Datalust.Piggy.Cli
 		}
 	}
 
-	public enum OptionValueType {
+	enum OptionValueType {
 		None, 
 		Optional,
 		Required,
 	}
 
-	public abstract class Option {
+	abstract class Option {
 		string prototype, description;
 		string[] names;
 		OptionValueType type;
@@ -560,7 +560,7 @@ namespace Datalust.Piggy.Cli
 		}
 	}
 
-	public abstract class ArgumentSource {
+	abstract class ArgumentSource {
 
 		protected ArgumentSource ()
 		{
@@ -624,7 +624,7 @@ namespace Datalust.Piggy.Cli
 		}
 	}
 
-	public class ResponseFileSource : ArgumentSource {
+	class ResponseFileSource : ArgumentSource {
 
 		public override string[] GetNames ()
 		{
@@ -646,7 +646,7 @@ namespace Datalust.Piggy.Cli
 		}
 	}
     
-	public class OptionException : Exception {
+	class OptionException : Exception {
 		private string option;
 
 		public OptionException ()
@@ -670,9 +670,9 @@ namespace Datalust.Piggy.Cli
 		}
 	}
 
-	public delegate void OptionAction<TKey, TValue> (TKey key, TValue value);
+	delegate void OptionAction<TKey, TValue> (TKey key, TValue value);
 
-	public class OptionSet : KeyedCollection<string, Option>
+	class OptionSet : KeyedCollection<string, Option>
 	{
 		public OptionSet ()
 			: this (delegate (string f) {return f;})

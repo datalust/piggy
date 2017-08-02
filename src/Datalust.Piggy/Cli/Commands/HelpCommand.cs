@@ -7,7 +7,7 @@ using Autofac.Features.Metadata;
 namespace Datalust.Piggy.Cli.Commands
 {
     [Command("help", "Show information about available commands")]
-    public class HelpCommand : Command
+    class HelpCommand : Command
     {
         readonly List<Meta<Lazy<Command>, CommandMetadata>> _availableCommands;
 
@@ -54,7 +54,7 @@ namespace Datalust.Piggy.Cli.Commands
             }
 
             Console.WriteLine();
-            Console.WriteLine($"Type '{name} help <command>' for detailed help.");
+            Console.WriteLine($"Type `{name} help <command>` for detailed help");
 
             return 0;
         }

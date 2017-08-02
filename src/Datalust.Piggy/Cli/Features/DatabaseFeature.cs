@@ -1,4 +1,6 @@
-﻿namespace Datalust.Piggy.Cli.Features
+﻿using System.Collections.Generic;
+
+namespace Datalust.Piggy.Cli.Features
 {
     class DatabaseFeature : CommandFeature
     {
@@ -16,6 +18,12 @@
                 "d=|database=",
                 "The database to apply changes to",
                 v => Database = v);
+        }
+
+        public override IEnumerable<string> GetUsageErrors()
+        {
+            if (!Requirement.IsNonEmpty(Host)) yield return Requirement.NonEmptyDescription("host");
+            if (!Requirement.IsNonEmpty(Database)) yield return Requirement.NonEmptyDescription("database");
         }
     }
 }

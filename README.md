@@ -81,3 +81,23 @@ piggy up ... -v schema=myapp -v admin=myuser
 ### Change log
 
 The change log is stored in the target database in `piggy.changes`. The `piggy log` command is used to view applied change scripts.
+
+### Help
+
+Run `piggy help` to see all available commands, and `piggy help <command>` for detailed command help.
+
+```
+> piggy help
+Usage: piggy <command> [<args>]
+
+Available commands are:
+  baseline   Add scripts to the change log without running them
+  help       Show information about available commands
+  log        List change scripts that have been applied to a database
+  pending    Determine which scripts will be run in an update
+  up         Bring a database up to date
+  --version  Print the current executable version
+
+Type `piggy help <command>` for detailed help
+```
+
