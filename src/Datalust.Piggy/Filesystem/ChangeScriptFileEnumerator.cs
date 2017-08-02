@@ -1,13 +1,16 @@
 using System;
 using System.IO;
 using System.Linq;
+using Serilog;
 
-namespace Datalust.Piggy.Update
+namespace Datalust.Piggy.Filesystem
 {
     static class ChangeScriptFileEnumerator
     {
         public static ChangeScriptFile[] EnumerateInOrder(string scriptRoot)
         {
+            Log.Information("Searching for *.sql change script files in {ScriptRoot}", scriptRoot);
+
             if (!Directory.Exists(scriptRoot))
                 throw new ArgumentException("The script root directory does not exist");
 

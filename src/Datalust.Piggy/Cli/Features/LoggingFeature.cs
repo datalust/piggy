@@ -7,13 +7,14 @@ namespace Datalust.Piggy.Cli.Features
     class LoggingFeature : CommandFeature
     {
         string _serverUrl, _apiKey;
-        LogEventLevel _level = LogEventLevel.Information;
+        LogEventLevel _level = LogEventLevel.Information, _consoleLevel = LevelAlias.Minimum;
 
         public override void Enable(OptionSet options)
         {
+            options.Add("quiet", "Limit diagnostic terminal output to errors only", v => _consoleLevel = LogEventLevel.Error);
+            options.Add("debug", "Write additional diagnostic log output", v => _level = LogEventLevel.Debug);
             options.Add("log-seq=", "Log output to a Seq server at the specified URL", v => _serverUrl = v);
             options.Add("log-seq-apikey=", "If logging to Seq, an optional API key", v => _apiKey = v);
-            options.Add("log-debug", "Write additional diagnostic log output", v => _level = LogEventLevel.Debug);
         }
 
         public void Configure()
@@ -22,7 +23,7 @@ namespace Datalust.Piggy.Cli.Features
                 .MinimumLevel.Is(_level)
                 .Enrich.WithProperty("Application", "Piggy")
                 .Enrich.WithProperty("Invocation", Guid.NewGuid())
-                .WriteTo.Console();
+                .WriteTo.Console(standardErrorFromLevel: LogEventLevel.Error, restrictedToMinimumLevel: _consoleLevel);
 
             if (!string.IsNullOrWhiteSpace(_serverUrl))
                 loggerConfiguration

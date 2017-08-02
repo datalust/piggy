@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Datalust.Piggy.Cli
 {
-    public abstract class Command
+    abstract class Command
     {
-        private readonly IList<CommandFeature> _features = new List<CommandFeature>();
+        readonly IList<CommandFeature> _features = new List<CommandFeature>();
 
         protected Command()
         {
@@ -48,7 +48,7 @@ namespace Datalust.Piggy.Cli
             {
                 var unrecognised = Options.Parse(args).ToArray();
 
-                var errs = _features.SelectMany(f => f.Errors).ToList();
+                var errs = _features.SelectMany(f => f.GetUsageErrors()).ToList();
 
                 if (errs.Any())
                 {
@@ -67,11 +67,9 @@ namespace Datalust.Piggy.Cli
 
         protected virtual int Run(string[] unrecognised)
         {
-            // All commands used to accept --nologo
-            var notIgnored = unrecognised.Where(o => o.IndexOf("nologo", StringComparison.OrdinalIgnoreCase) == -1);
-            if (notIgnored.Any())
+            if (unrecognised.Any())
             {
-                ShowUsageErrors(new [] { "Unrecognized options: " + string.Join(", ", notIgnored) });
+                ShowUsageErrors(new [] { "Unrecognized options: " + string.Join(", ", unrecognised) });
                 return -1;
             }
 
@@ -92,9 +90,9 @@ namespace Datalust.Piggy.Cli
 
         protected bool Require(string value, string name)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (!Requirement.IsNonEmpty(value))
             {
-                ShowUsageErrors(new [] { $"Please specify a {name}." });
+                ShowUsageErrors(new [] { Requirement.NonEmptyDescription(name) });
                 return false;
             }
             return true;

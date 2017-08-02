@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Datalust.Piggy.Database;
+using Datalust.Piggy.Filesystem;
 using Datalust.Piggy.History;
+using Datalust.Piggy.Status;
 using Datalust.Piggy.Syntax;
 using Npgsql;
 using Serilog;
@@ -15,20 +16,9 @@ namespace Datalust.Piggy.Update
         public static void ApplyChangeScripts(string host, string database, string username, string password,
             bool createIfMissing, string scriptRoot, IReadOnlyDictionary<string, string> variables)
         {
-            Log.Information("Connecting to database {Database} on {Host}", database, host);
             using (var connection = DatabaseConnector.Connect(host, database, username, password, createIfMissing))
             {
-                Log.Information("Connected");
-
-                Log.Information("Loading applied change scripts from the database");
-                var changes = AppliedChangeScriptLog.GetAppliedChangeScripts(connection);
-                Log.Information("Database history contains {AppliedCount} applied changes", changes.Length);
-
-                Log.Information("Searching for *.sql change script files in {ScriptRoot}", scriptRoot);
-                var applied = new HashSet<string>(changes.Select(m => m.ScriptFile));
-                var scripts = ChangeScriptFileEnumerator.EnumerateInOrder(scriptRoot)
-                    .Where(s => !applied.Contains(s.RelativeName))
-                    .ToArray();
+                var scripts = DatabaseStatus.GetPendingScripts(connection, scriptRoot);
 
                 Log.Information("Found {Count} new script files to apply", scripts.Length);
 
