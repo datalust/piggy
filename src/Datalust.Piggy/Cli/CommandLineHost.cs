@@ -31,7 +31,7 @@ namespace Datalust.Piggy.Cli
             }
 
             Console.WriteLine($"Usage: {name} <command> [<args>]");
-            Console.WriteLine($"Type '{name} help' for available commands.");
+            Console.WriteLine($"Type '{name} help' for available commands");
             return -1;
         }
     }

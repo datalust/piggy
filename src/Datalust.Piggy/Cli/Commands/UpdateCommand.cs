@@ -38,9 +38,7 @@ namespace Datalust.Piggy.Cli.Commands
         {
             _loggingFeature.Configure();
 
-            if (!(Require(_databaseFeature.Host, "host") && Require(_databaseFeature.Database, "database") &&
-                Require("username", _usernamePasswordFeature.Username) && Require("password", _usernamePasswordFeature.Password) &&
-                Require(_scriptRoot, "script root directory")))
+            if (!Require(_scriptRoot, "script root directory"))
                 return -1;
 
             try
