@@ -54,7 +54,7 @@ namespace Datalust.Piggy.Cli.Commands
             }
 
             Console.WriteLine();
-            Console.WriteLine($"Type '{name} help <command>' for detailed help.");
+            Console.WriteLine($"Type `{name} help <command>` for detailed help");
 
             return 0;
         }
