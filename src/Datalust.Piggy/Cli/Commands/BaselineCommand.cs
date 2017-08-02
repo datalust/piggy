@@ -1,4 +1,5 @@
 ﻿using System;
+using Datalust.Piggy.Baseline;
 using Datalust.Piggy.Cli.Features;
 using Datalust.Piggy.Update;
 using Npgsql;
@@ -6,26 +7,19 @@ using Serilog;
 
 namespace Datalust.Piggy.Cli.Commands
 {
-    [Command("up", "Bring a database up to date")]
-    class UpdateCommand : Command
+    [Command("baseline", "Add scripts to the change log without running them")]
+    class BaselineCommand : Command
     {
-        readonly DefineVariablesFeature _defineVariablesFeature;
         readonly UsernamePasswordFeature _usernamePasswordFeature;
         readonly DatabaseFeature _databaseFeature;
         readonly LoggingFeature _loggingFeature;
         readonly ScriptRootFeature _scriptRootFeature;
 
-        bool _createIfMissing = true;
-
-        public UpdateCommand()
+        public BaselineCommand()
         {
             _databaseFeature = Enable<DatabaseFeature>();
             _usernamePasswordFeature = Enable<UsernamePasswordFeature>();
             _scriptRootFeature = Enable<ScriptRootFeature>();
-            _defineVariablesFeature = Enable<DefineVariablesFeature>();
-
-            Options.Add("no-create", "If the database does not already exist, do not attempt to create it", v => _createIfMissing = false);
-
             _loggingFeature = Enable<LoggingFeature>();
         }
 
@@ -35,20 +29,15 @@ namespace Datalust.Piggy.Cli.Commands
 
             try
             {
-                UpdateSession.ApplyChangeScripts(
+                BaselineSession.BaselineDatabase(
                     _databaseFeature.Host, _databaseFeature.Database, _usernamePasswordFeature.Username, _usernamePasswordFeature.Password,
-                    _createIfMissing, _scriptRootFeature.ScriptRoot, _defineVariablesFeature.Variables);
+                    _scriptRootFeature.ScriptRoot);
 
                 return 0;
             }
-            catch (PostgresException ex)
-            {
-                Log.Fatal("Could not apply change scripts: {Message} ({SqlState})", ex.MessageText, ex.SqlState);
-                return -1;
-            }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Could not apply change scripts");
+                Log.Fatal(ex, "Could not baseline the database");
                 return -1;
             }
         }

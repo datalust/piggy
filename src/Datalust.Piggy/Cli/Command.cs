@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Datalust.Piggy.Cli
 {
-    public abstract class Command
+    abstract class Command
     {
         readonly IList<CommandFeature> _features = new List<CommandFeature>();
 

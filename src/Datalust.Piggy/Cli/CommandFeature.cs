@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Datalust.Piggy.Cli
 {
-    public abstract class CommandFeature
+    abstract class CommandFeature
     {
         public abstract void Enable(OptionSet options);
 

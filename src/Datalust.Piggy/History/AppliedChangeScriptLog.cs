@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Datalust.Piggy.Update;
+using Datalust.Piggy.Filesystem;
 using Npgsql;
 using Serilog;
 
@@ -24,13 +24,17 @@ CREATE TABLE IF NOT EXISTS " + ChangesTableName + @" (
 
         public static AppliedChangeScript[] GetAppliedChangeScripts(NpgsqlConnection connection)
         {
+            Log.Information("Loading applied change scripts from the database");
+
             try
             {
-                return connection.Query<AppliedChangeScript>($"SELECT scriptfile, appliedat, appliedby, appliedorder FROM {ChangesTableName} ORDER BY appliedorder ASC;").AsList().ToArray();
+                var changes = connection.Query<AppliedChangeScript>($"SELECT scriptfile, appliedat, appliedby, appliedorder FROM {ChangesTableName} ORDER BY appliedorder ASC;").AsList().ToArray();
+                Log.Information("Database history contains {AppliedCount} applied changes", changes.Length);
+                return changes;
             }
             catch (PostgresException px) when (px.SqlState == "42P01")
             {
-                Log.Debug(px, "Change log table does not exist");
+                Log.Information("Database history is empty (change log table does not exist)");
                 return new AppliedChangeScript[0];
             }
         }
