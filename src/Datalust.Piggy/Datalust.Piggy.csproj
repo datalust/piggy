@@ -36,7 +36,7 @@
     <PackageReference Include="serilog.sinks.seq" Version="3.3.2" />
     <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
     <PackageReference Include="System.Threading.ThreadPool" Version="4.3.0" />
-    <PackageReference Include="ILLink.Tasks" Version="0.1.4-preview-906439" />
+    <PackageReference Include="ILLink.Tasks" Version="0.1.4-preview-981901" />
   </ItemGroup>
 
 </Project>
