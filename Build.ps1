@@ -40,17 +40,17 @@ function Publish-Gzips($version)
 {
 	$rids = @("ubuntu.14.04-x64", "ubuntu.16.04-x64", "rhel.7-x64", "osx.10.12-x64")
 	foreach ($rid in $rids) {
-		& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -r $rid /p:VersionPrefix=$version
+		& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -f netcoreapp2.0 -r $rid /p:VersionPrefix=$version /p:ShowLinkerSizeComparison=true
 	    if($LASTEXITCODE -ne 0) { exit 4 }
 	
 		# Make sure the archive contains a reasonable root filename
-		mv ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/publish/ ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/piggy-$version-$rid/
+		mv ./src/Datalust.Piggy/bin/Release/netcoreapp2.0/$rid/publish/ ./src/Datalust.Piggy/bin/Release/netcoreapp2.0/$rid/piggy-$version-$rid/
 
-		& ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/piggy-$version-$rid/
+		& ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/netcoreapp2.0/$rid/piggy-$version-$rid/
 		if($LASTEXITCODE -ne 0) { exit 5 }
 
 		# Back to the original directory name
-		mv ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/piggy-$version-$rid/ ./src/Datalust.Piggy/bin/Release/netcoreapp1.1/$rid/publish/
+		mv ./src/Datalust.Piggy/bin/Release/netcoreapp2.0/$rid/piggy-$version-$rid/ ./src/Datalust.Piggy/bin/Release/netcoreapp2.0/$rid/publish/
 		
 		& ./build/7-zip/7za.exe a -tgzip ./artifacts/piggy-$version-$rid.tar.gz piggy-$version-$rid.tar
 		if($LASTEXITCODE -ne 0) { exit 6 }
@@ -61,10 +61,10 @@ function Publish-Gzips($version)
 
 function Publish-Msi($version)
 {
-	& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -r win10-x64 /p:VersionPrefix=$version
+	& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -f netcoreapp2.0 -r win10-x64 /p:VersionPrefix=$version /p:ShowLinkerSizeComparison=true
 	if($LASTEXITCODE -ne 0) { exit 7 }
 
-	& msbuild ./setup/Datalust.Piggy.Setup/Datalust.Piggy.Setup.wixproj /t:Rebuild /p:Configuration=Release /p:Platform=x64 /p:Version=$version
+	& msbuild ./setup/Datalust.Piggy.Setup/Datalust.Piggy.Setup.wixproj /t:Build /p:Configuration=Release /p:Platform=x64 /p:Version=$version /p:BuildProjectReferences=false
 	if($LASTEXITCODE -ne 0) { exit 8 }
 
 	mv ./setup/Datalust.Piggy.Setup/bin/Release/piggy.msi ./artifacts/piggy-$version.msi
