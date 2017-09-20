@@ -48,9 +48,9 @@
   </Target>
   <Target Name="BeforeBuild">
     <PropertyGroup>
-      <LinkerBaseInputPaths>..\..\src\Datalust.Piggy\bin\$(Configuration)\netcoreapp1.1\win10-x64\publish</LinkerBaseInputPaths>
-      <DefineConstants>BasePath=..\..\src\Datalust.Piggy\bin\$(Configuration)\netcoreapp1.1\win10-x64\publish</DefineConstants>
+      <LinkerBaseInputPaths>..\..\src\Datalust.Piggy\bin\$(Configuration)\netcoreapp2.0\win10-x64\publish</LinkerBaseInputPaths>
+      <DefineConstants>BasePath=..\..\src\Datalust.Piggy\bin\$(Configuration)\netcoreapp2.0\win10-x64\publish</DefineConstants>
     </PropertyGroup>
-    <HeatDirectory OutputFile="Piggy.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="Piggy_Project" SuppressCom="true" Directory="..\..\src\Datalust.Piggy\bin\$(Configuration)\netcoreapp1.1\win10-x64\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" Transforms="RemovePdbs.xslt" />
+    <HeatDirectory OutputFile="Piggy.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="Piggy_Project" SuppressCom="true" Directory="..\..\src\Datalust.Piggy\bin\$(Configuration)\netcoreapp2.0\win10-x64\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" Transforms="RemovePdbs.xslt" />
   </Target>
 </Project>
