@@ -40,7 +40,7 @@ function Publish-Gzips($version)
 {
 	$rids = @("ubuntu.14.04-x64", "ubuntu.16.04-x64", "rhel.7-x64", "osx.10.12-x64")
 	foreach ($rid in $rids) {
-		& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -f netcoreapp2.0 -r $rid /p:VersionPrefix=$version /p:ShowLinkerSizeComparison=true
+		& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -f netcoreapp2.0 -r $rid /p:VersionPrefix=$version
 	    if($LASTEXITCODE -ne 0) { exit 4 }
 	
 		# Make sure the archive contains a reasonable root filename
@@ -61,13 +61,19 @@ function Publish-Gzips($version)
 
 function Publish-Msi($version)
 {
-	& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -f netcoreapp2.0 -r win10-x64 /p:VersionPrefix=$version /p:ShowLinkerSizeComparison=true
+	& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -f netcoreapp2.0 -r win10-x64 /p:VersionPrefix=$version
 	if($LASTEXITCODE -ne 0) { exit 7 }
 
 	& msbuild ./setup/Datalust.Piggy.Setup/Datalust.Piggy.Setup.wixproj /t:Build /p:Configuration=Release /p:Platform=x64 /p:Version=$version /p:BuildProjectReferences=false
 	if($LASTEXITCODE -ne 0) { exit 8 }
 
 	mv ./setup/Datalust.Piggy.Setup/bin/Release/piggy.msi ./artifacts/piggy-$version.msi
+}
+
+function Publish-Nupkgs($version)
+{
+	& dotnet pack src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -o $PSScriptRoot/artifacts /p:VersionPrefix=$version /p:OutputType=Library
+	if($LASTEXITCODE -ne 0) { exit 9 }
 }
 
 Push-Location $PSScriptRoot
@@ -83,5 +89,6 @@ Execute-Tests
 Create-ArtifactDir
 Publish-Gzips($version)
 Publish-Msi($version)
+Publish-Nupkgs($version)
 
 Pop-Location

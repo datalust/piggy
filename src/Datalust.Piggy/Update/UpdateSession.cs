@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Datalust.Piggy.Database;
 using Datalust.Piggy.Filesystem;
 using Datalust.Piggy.History;
 using Datalust.Piggy.Status;
@@ -11,32 +10,37 @@ using Serilog;
 
 namespace Datalust.Piggy.Update
 {
-    static class UpdateSession
+    /// <summary>
+    /// Applies updates to a target database.
+    /// </summary>
+    public static class UpdateSession
     {
-        public static void ApplyChangeScripts(string host, string database, string username, string password,
-            bool createIfMissing, string scriptRoot, IReadOnlyDictionary<string, string> variables)
+        /// <summary>
+        /// Apply change scripts from a folder hierarchy.
+        /// </summary>
+        /// <param name="connection">The database connection to use.</param>
+        /// <param name="scriptRoot">A root filesystem folder under which change scripts are stored.</param>
+        /// <param name="variables">A set of variables to replace within change scripts.</param>
+        public static void ApplyChangeScripts(NpgsqlConnection connection, string scriptRoot, IReadOnlyDictionary<string, string> variables)
         {
-            using (var connection = DatabaseConnector.Connect(host, database, username, password, createIfMissing))
+            var scripts = DatabaseStatus.GetPendingScripts(connection, scriptRoot);
+
+            Log.Information("Found {Count} new script files to apply", scripts.Length);
+
+            if (scripts.Length != 0)
             {
-                var scripts = DatabaseStatus.GetPendingScripts(connection, scriptRoot);
-
-                Log.Information("Found {Count} new script files to apply", scripts.Length);
-
-                if (scripts.Length != 0)
-                {
-                    Log.Information("Ensuring the change log table exists");
-                    using (var command = new NpgsqlCommand(AppliedChangeScriptLog.ChangesTableCreateScript, connection))
-                        command.ExecuteNonQuery();
-                }
-
-                foreach (var script in scripts)
-                {
-                    Log.Information("Applying {FullPath} as {ScriptFile}", script.FullPath, script.RelativeName);
-                    ApplyChangeScript(connection, script, variables);
-                }
-
-                Log.Information("Done");
+                Log.Information("Ensuring the change log table exists");
+                using (var command = new NpgsqlCommand(AppliedChangeScriptLog.ChangesTableCreateScript, connection))
+                    command.ExecuteNonQuery();
             }
+
+            foreach (var script in scripts)
+            {
+                Log.Information("Applying {FullPath} as {ScriptFile}", script.FullPath, script.RelativeName);
+                ApplyChangeScript(connection, script, variables);
+            }
+
+            Log.Information("Done");
         }
 
         static void ApplyChangeScript(NpgsqlConnection connection, ChangeScriptFile script, IReadOnlyDictionary<string, string> variables)
