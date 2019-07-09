@@ -72,7 +72,7 @@ function Publish-Msi($version)
 
 function Publish-Nupkgs($version)
 {
-	& dotnet pack src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -o ./artifacts /p:VersionPrefix=$version /p:OutputType=Library
+	& dotnet pack src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -o $PSScriptRoot/artifacts /p:VersionPrefix=$version /p:OutputType=Library
 	if($LASTEXITCODE -ne 0) { exit 9 }
 }
 
