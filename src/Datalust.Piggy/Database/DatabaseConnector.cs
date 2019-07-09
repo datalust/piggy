@@ -1,3 +1,4 @@
+using System;
 using Npgsql;
 using Npgsql.Logging;
 using Serilog;
@@ -26,16 +27,12 @@ namespace Datalust.Piggy.Database
         /// <returns>An open database connection.</returns>
         public static NpgsqlConnection Connect(string host, string database, string username, string password, bool createIfMissing)
         {
-            NpgsqlConnection conn = null;
             try
             {
-                conn = Connect($"Host={host};Username={username};Password={password};Database={database}");
-                return conn;
+                return Connect($"Host={host};Username={username};Password={password};Database={database}");
             }
             catch (PostgresException px) when (px.SqlState == "3D000")
             {
-                conn?.Dispose();
-
                 if (createIfMissing && TryCreate(host, database, username, password))
                     return Connect(host, database, username, password, false);
 
@@ -50,11 +47,21 @@ namespace Datalust.Piggy.Database
         /// <returns>An open database connection.</returns>
         public static NpgsqlConnection Connect(string connectionString)
         {
+            if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
+
             var conn = new NpgsqlConnection(connectionString);
             
             Log.Information("Connecting to database {Database} on {Host}", conn.Database, conn.Host);
 
-            conn.Open();
+            try
+            {
+                conn.Open();
+            }
+            catch
+            {
+                conn.Dispose();
+                throw;
+            }
 
             Log.Information("Connected");
 
