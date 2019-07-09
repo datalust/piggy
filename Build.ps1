@@ -70,6 +70,12 @@ function Publish-Msi($version)
 	mv ./setup/Datalust.Piggy.Setup/bin/Release/piggy.msi ./artifacts/piggy-$version.msi
 }
 
+function Publish-Nupkgs($version)
+{
+	& dotnet pack src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -o ./artifacts /p:VersionPrefix=$version /p:OutputType=Library
+	if($LASTEXITCODE -ne 0) { exit 9 }
+}
+
 Push-Location $PSScriptRoot
 
 $version = @{ $true = $env:APPVEYOR_BUILD_VERSION; $false = "99.99.99" }[$env:APPVEYOR_BUILD_VERSION -ne $NULL];
@@ -83,5 +89,6 @@ Execute-Tests
 Create-ArtifactDir
 Publish-Gzips($version)
 Publish-Msi($version)
+Publish-Nupkgs($version)
 
 Pop-Location

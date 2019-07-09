@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Description>A friendly PostgreSQL script runner in the spirit of DbUp.</Description>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
     <AssemblyName>piggy</AssemblyName>
@@ -9,6 +10,12 @@
     <GenerateAssemblyInformationalVersionAttribute>True</GenerateAssemblyInformationalVersionAttribute>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <TreatSpecificWarningsAsErrors />
+    <Authors>Datalust and Contributors</Authors>
+    <PackageId>Datalust.Piggy</PackageId>
+    <PackageTags>postgresql</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/datalust/piggy/dev/asset/Piggy-Icon-128px.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/datalust/piggy</PackageProjectUrl>
+    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
   </PropertyGroup>
   
   <ItemGroup>
