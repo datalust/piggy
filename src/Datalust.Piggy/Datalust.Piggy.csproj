@@ -35,15 +35,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="dapper" Version="1.50.2" />
-    <PackageReference Include="npgsql" Version="3.2.4.1" />
-    <PackageReference Include="Serilog" Version="2.5.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.0.1" />
-    <PackageReference Include="Autofac" Version="4.0.0" />
-    <PackageReference Include="serilog.sinks.seq" Version="3.3.2" />
+    <PackageReference Include="dapper" Version="1.60.6" />
+    <PackageReference Include="npgsql" Version="4.0.7" />
+    <PackageReference Include="Serilog" Version="2.8.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Autofac" Version="4.9.2" />
+    <PackageReference Include="serilog.sinks.seq" Version="4.0.0" />
     <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
     <PackageReference Include="System.Threading.ThreadPool" Version="4.3.0" />
-    <PackageReference Include="ILLink.Tasks" Version="0.1.4-preview-981901" />
   </ItemGroup>
 
 </Project>
