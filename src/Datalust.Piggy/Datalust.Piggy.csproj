@@ -8,14 +8,14 @@
     <ApplicationIcon>..\..\asset\Piggy-Icon-128px.ico</ApplicationIcon>
     <RuntimeIdentifiers>win10-x64;ubuntu.14.04-x64;ubuntu.16.04-x64;rhel.7-x64;osx.10.12-x64</RuntimeIdentifiers>
     <GenerateAssemblyInformationalVersionAttribute>True</GenerateAssemblyInformationalVersionAttribute>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <TreatSpecificWarningsAsErrors />
     <Authors>Datalust and Contributors</Authors>
     <PackageId>Datalust.Piggy</PackageId>
     <PackageTags>postgresql</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/datalust/piggy/dev/asset/Piggy-Icon-128px.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/datalust/piggy</PackageProjectUrl>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);NU5125</NoWarn>
   </PropertyGroup>
   
   <ItemGroup>
