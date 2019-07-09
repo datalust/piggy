@@ -1,5 +1,6 @@
 ﻿using System;
 using Datalust.Piggy.Cli.Features;
+using Datalust.Piggy.Database;
 using Datalust.Piggy.Update;
 using Npgsql;
 using Serilog;
@@ -35,9 +36,10 @@ namespace Datalust.Piggy.Cli.Commands
 
             try
             {
-                UpdateSession.ApplyChangeScripts(
-                    _databaseFeature.Host, _databaseFeature.Database, _usernamePasswordFeature.Username, _usernamePasswordFeature.Password,
-                    _createIfMissing, _scriptRootFeature.ScriptRoot, _defineVariablesFeature.Variables);
+                using (var connection = DatabaseConnector.Connect(_databaseFeature.Host, _databaseFeature.Database, _usernamePasswordFeature.Username, _usernamePasswordFeature.Password, _createIfMissing))
+                {
+                    UpdateSession.ApplyChangeScripts(connection, _scriptRootFeature.ScriptRoot, _defineVariablesFeature.Variables);
+                }
 
                 return 0;
             }

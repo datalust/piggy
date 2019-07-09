@@ -101,3 +101,15 @@ Available commands are:
 Type `piggy help <command>` for detailed help
 ```
 
+### C&sharp; API
+
+For development and test automation purposes, the core script runner is also packaged as a C&sharp; API and published to NuGet as _Datalust.Piggy_.
+
+```csharp
+// dotnet add package Datalust.Piggy
+var connectionString = // Npgsql connection string
+using (var connection = DatabaseConnector.Connect(connectionString, createIfMissing: true)
+{
+    UpdateSession.ApplyChangeScripts(connection, "./db", new Dictionary<string, string>());
+}
+```

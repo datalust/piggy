@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FC0A256C-CC1F-4ECE-AF09-707248D10DC1}"
 EndProject
@@ -11,7 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sln", "sln", "{2EA56595-519
 		appveyor.yml = appveyor.yml
 		Build.ps1 = Build.ps1
 		LICENSE = LICENSE
-		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
 EndProject
