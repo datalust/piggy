@@ -30,8 +30,8 @@ namespace Datalust.Piggy.Cli.Commands
             try
             {
                 BaselineSession.BaselineDatabase(
-                    _databaseFeature.Host, _databaseFeature.Database, _usernamePasswordFeature.Username, _usernamePasswordFeature.Password,
-                    _scriptRootFeature.ScriptRoot);
+                    _databaseFeature.Host!, _databaseFeature.Database!, _usernamePasswordFeature.Username!, _usernamePasswordFeature.Password!,
+                    _scriptRootFeature.ScriptRoot!);
 
                 return 0;
             }

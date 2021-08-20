@@ -23,14 +23,7 @@ namespace Datalust.Piggy.Cli.Commands
         protected override int Run()
         {
             _loggingFeature.Configure();
-
-<<<<<<< HEAD
-=======
-            if (!(Require(_databaseFeature.Host, "host") && Require(_databaseFeature.Database, "database") &&
-                  Require(_usernamePasswordFeature.Username, "username") && Require(_usernamePasswordFeature.Password, "password")))
-                return -1;
-
->>>>>>> 71bfa0c (Nullable reference types)
+            
             try
             {
                 using var connection = DatabaseConnector.Connect(_databaseFeature.Host!, _databaseFeature.Database!,

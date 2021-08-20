@@ -4,7 +4,7 @@ namespace Datalust.Piggy.Cli.Features
 {
     class ScriptRootFeature : CommandFeature
     {
-        public string ScriptRoot { get; set; }
+        public string? ScriptRoot { get; set; }
 
         public override void Enable(OptionSet options)
         {

@@ -6,7 +6,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>piggy</AssemblyName>
     <ApplicationIcon>..\..\asset\Piggy-Icon-128px.ico</ApplicationIcon>
-    <RuntimeIdentifiers>win10-x64;ubuntu.14.04-x64;ubuntu.16.04-x64;rhel.7-x64;osx.10.12-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
     <GenerateAssemblyInformationalVersionAttribute>True</GenerateAssemblyInformationalVersionAttribute>
     <Authors>Datalust and Contributors</Authors>
     <PackageId>Datalust.Piggy</PackageId>

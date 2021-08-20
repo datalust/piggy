@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Datalust.Piggy.Database;
+using Datalust.Piggy.Filesystem;
 using Datalust.Piggy.History;
 using Datalust.Piggy.Syntax;
 using Npgsql;
