@@ -14,11 +14,11 @@ deploy:
     secure: ErGkGoLMaZtkFgFcBIFjNn3twXKxEhO27F7vQGlx0m7ouCV3XdgGdSNERZOmdLLw
   skip_symbols: true
   on:
-    branch: master
+    branch: main
 - provider: GitHub
   auth_token:
     secure: Bo3ypKpKFxinjR9ShkNekNvkob2iklHJU+UlYyfHtcFFIAa58SV2TkEd0xWxz633
   artifact: /piggy-.*\.(msi|tar\.gz)/
   tag: v$(appveyor_build_version)
   on:
-    branch: master
+    branch: main
