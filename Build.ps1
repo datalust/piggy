@@ -3,31 +3,9 @@ function Clean-Output
 	if(Test-Path ./artifacts) { rm ./artifacts -Force -Recurse }
 }
 
-function Restore-Packages
-{
-	& dotnet restore
-}
-
-function Update-WixVersion($version)
-{
-    $defPattern = "define Version = ""0\.0\.0"""
-	$def = "define Version = ""$version"""
-    $product = ".\setup\Datalust.Piggy.Setup\Product.wxs"
-
-    (cat $product) | foreach {  
-            % {$_ -replace $defPattern, $def }    
-        } | sc -Encoding "UTF8" $product
-}
-
-function Execute-MSBuild($version)
-{
-	& msbuild ./piggy.sln /t:Rebuild /p:Configuration=Release /p:Platform=x64 /p:VersionPrefix=$version
-    if($LASTEXITCODE -ne 0) { exit 2 }
-}
-
 function Execute-Tests
 {
-    & dotnet test ./test/Datalust.Piggy.Tests/Datalust.Piggy.Tests.csproj -c Release /p:Configuration=Release /p:Platform=x64 /p:VersionPrefix=$version
+    & dotnet test ./test/Datalust.Piggy.Tests/Datalust.Piggy.Tests.csproj -c Release /p:VersionPrefix=$version
     if($LASTEXITCODE -ne 0) { exit 3 }
 }
 
@@ -46,28 +24,22 @@ function Publish-Gzips($version)
 		# Make sure the archive contains a reasonable root filename
 		mv ./src/Datalust.Piggy/bin/Release/net5.0/$rid/publish/ ./src/Datalust.Piggy/bin/Release/net5.0/$rid/piggy-$version-$rid/
 
-		& ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/net5.0/$rid/piggy-$version-$rid/
-		if($LASTEXITCODE -ne 0) { exit 5 }
+        if ($rid -ne "win-x64") {
+            & ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/net5.0/$rid/piggy-$version-$rid/
+            if($LASTEXITCODE -ne 0) { exit 5 }
+            
+            & ./build/7-zip/7za.exe a -tgzip ./artifacts/piggy-$version-$rid.tar.gz piggy-$version-$rid.tar
+            if($LASTEXITCODE -ne 0) { exit 6 }
+
+    		rm piggy-$version-$rid.tar
+        } else {
+            & ./build/7-zip/7za.exe a -tzip ./artifacts/piggy-$version-$rid.zip ./src/Datalust.Piggy/bin/Release/net5.0/$rid/piggy-$version-$rid/
+            if($LASTEXITCODE -ne 0) { exit 7 }
+        }
 
 		# Back to the original directory name
 		mv ./src/Datalust.Piggy/bin/Release/net5.0/$rid/piggy-$version-$rid/ ./src/Datalust.Piggy/bin/Release/net5.0/$rid/publish/
-		
-		& ./build/7-zip/7za.exe a -tgzip ./artifacts/piggy-$version-$rid.tar.gz piggy-$version-$rid.tar
-		if($LASTEXITCODE -ne 0) { exit 6 }
-
-		rm piggy-$version-$rid.tar
 	}
-}
-
-function Publish-Msi($version)
-{
-	& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -f net5.0 -r win-x64 /p:VersionPrefix=$version
-	if($LASTEXITCODE -ne 0) { exit 7 }
-
-	& msbuild ./setup/Datalust.Piggy.Setup/Datalust.Piggy.Setup.wixproj /t:Build /p:Configuration=Release /p:Platform=x64 /p:Version=$version /p:BuildProjectReferences=false
-	if($LASTEXITCODE -ne 0) { exit 8 }
-
-	mv ./setup/Datalust.Piggy.Setup/bin/Release/piggy.msi ./artifacts/piggy-$version.msi
 }
 
 function Publish-Nupkgs($version)
@@ -82,13 +54,9 @@ $version = @{ $true = $env:APPVEYOR_BUILD_VERSION; $false = "99.99.99" }[$env:AP
 Write-Output "Building version $version"
 
 Clean-Output
-Restore-Packages
-Update-WixVersion($version)
-Execute-MSBuild($version)
 Execute-Tests
 Create-ArtifactDir
 Publish-Gzips($version)
-Publish-Msi($version)
 Publish-Nupkgs($version)
 
 Pop-Location

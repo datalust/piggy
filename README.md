@@ -10,7 +10,7 @@ Piggy is a simple command-line tool for managing schema and data changes to Post
 
 ### Installation
 
-Piggy is available for Windows, macOS and Linux from [the releases page](https://github.com/datalust/piggy/releases). Download the MSI or archive file for [your platform](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog). If your platform of choice isn't listed, please [raise an issue here](https://github.com/datalust/piggy/issues) so that we can add it.
+Piggy is available for Windows, macOS and Linux from [the releases page](https://github.com/datalust/piggy/releases). If your platform of choice isn't listed, please [raise an issue here](https://github.com/datalust/piggy/issues) so that we can add it.
 
 ### Workflow
 

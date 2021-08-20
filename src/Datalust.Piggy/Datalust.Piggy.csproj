@@ -13,13 +13,13 @@
     <PackageTags>postgresql</PackageTags>
     <PackageProjectUrl>https://github.com/datalust/piggy</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>    
-    <PackageIcon>Piggy-Icon-128px.ico</PackageIcon>
+    <PackageIcon>Piggy-Icon-128px.png</PackageIcon>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\asset\Piggy-Icon-128px.ico" Pack="true" Visible="false" PackagePath="" />
+    <None Include="..\..\asset\Piggy-Icon-128px.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
