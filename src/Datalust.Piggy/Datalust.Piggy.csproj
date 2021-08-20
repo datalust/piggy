@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>A friendly PostgreSQL script runner in the spirit of DbUp.</Description>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>piggy</AssemblyName>
     <ApplicationIcon>..\..\asset\Piggy-Icon-128px.ico</ApplicationIcon>
     <RuntimeIdentifiers>win10-x64;ubuntu.14.04-x64;ubuntu.16.04-x64;rhel.7-x64;osx.10.12-x64</RuntimeIdentifiers>
@@ -11,37 +11,30 @@
     <Authors>Datalust and Contributors</Authors>
     <PackageId>Datalust.Piggy</PackageId>
     <PackageTags>postgresql</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/datalust/piggy/dev/asset/Piggy-Icon-128px.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/datalust/piggy</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>    
+    <PackageIcon>Piggy-Icon-128px.ico</PackageIcon>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <Content Include="..\..\asset\Piggy-Icon-128px.ico" Link="Piggy-Icon-128px.ico" />
-    <Content Include="Attribution\Npgsql License.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Attribution\Dapper License.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Attribution\Serilog License.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Attribution\Autofac License.txt">
+    <None Include="..\..\asset\Piggy-Icon-128px.ico" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Attribution\*.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="dapper" Version="1.60.6" />
-    <PackageReference Include="npgsql" Version="4.0.7" />
-    <PackageReference Include="Serilog" Version="2.8.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="Autofac" Version="4.9.2" />
-    <PackageReference Include="serilog.sinks.seq" Version="4.0.0" />
-    <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
-    <PackageReference Include="System.Threading.ThreadPool" Version="4.3.0" />
+    <PackageReference Include="dapper" Version="2.0.90" />
+    <PackageReference Include="npgsql" Version="5.0.7" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
+    <PackageReference Include="Autofac" Version="6.2.0" />
+    <PackageReference Include="serilog.sinks.seq" Version="5.0.1" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>
