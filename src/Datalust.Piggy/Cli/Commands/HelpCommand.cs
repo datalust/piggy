@@ -18,7 +18,7 @@ namespace Datalust.Piggy.Cli.Commands
 
         protected override int Run(string[] unrecognised)
         {
-            var ea = Assembly.GetEntryAssembly();
+            var ea = Assembly.GetEntryAssembly()!;
             var name = ea.GetName().Name;
 
             if (unrecognised.Length > 0)
@@ -48,7 +48,7 @@ namespace Datalust.Piggy.Cli.Commands
             {
                 Printing.Define(
                     "  " + availableCommand.Metadata.Name,
-                    availableCommand.Metadata.HelpText,
+                    availableCommand.Metadata.HelpText!,
                     13,
                     Console.Out);
             }

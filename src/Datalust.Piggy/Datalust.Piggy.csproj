@@ -15,6 +15,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>    
     <PackageIcon>Piggy-Icon-128px.ico</PackageIcon>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

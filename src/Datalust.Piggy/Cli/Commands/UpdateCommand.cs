@@ -16,6 +16,10 @@ namespace Datalust.Piggy.Cli.Commands
         readonly LoggingFeature _loggingFeature;
         readonly ScriptRootFeature _scriptRootFeature;
 
+<<<<<<< HEAD:src/Datalust.Piggy/Cli/Commands/UpdateCommand.cs
+=======
+        string? _scriptRoot;
+>>>>>>> 71bfa0c (Nullable reference types):src/Datalust.Piggy/Cli/Commands/ApplyCommand.cs
         bool _createIfMissing = true;
 
         public UpdateCommand()
@@ -34,12 +38,25 @@ namespace Datalust.Piggy.Cli.Commands
         {
             _loggingFeature.Configure();
 
+<<<<<<< HEAD:src/Datalust.Piggy/Cli/Commands/UpdateCommand.cs
             try
             {
                 using (var connection = DatabaseConnector.Connect(_databaseFeature.Host, _databaseFeature.Database, _usernamePasswordFeature.Username, _usernamePasswordFeature.Password, _createIfMissing))
                 {
                     UpdateSession.ApplyChangeScripts(connection, _scriptRootFeature.ScriptRoot, _defineVariablesFeature.Variables);
                 }
+=======
+            if (!(Require(_databaseFeature.Host, "host") && Require(_databaseFeature.Database, "database") &&
+                Require(_usernamePasswordFeature.Username, "username") && Require(_usernamePasswordFeature.Password, "password") &&
+                Require(_scriptRoot, "script root directory")))
+                return -1;
+
+            try
+            {
+                ApplySession.ApplyChangeScripts(
+                    _databaseFeature.Host!, _databaseFeature.Database!, _usernamePasswordFeature.Username!, _usernamePasswordFeature.Password!,
+                    _createIfMissing, _scriptRoot!, _defineVariablesFeature.Variables);
+>>>>>>> 71bfa0c (Nullable reference types):src/Datalust.Piggy/Cli/Commands/ApplyCommand.cs
 
                 return 0;
             }

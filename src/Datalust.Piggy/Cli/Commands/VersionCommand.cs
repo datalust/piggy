@@ -8,7 +8,11 @@ namespace Datalust.Piggy.Cli.Commands
     {
         protected override int Run()
         {
+<<<<<<< HEAD
             var version = GetVersion();
+=======
+            var version = Assembly.GetEntryAssembly()!.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion;
+>>>>>>> 71bfa0c (Nullable reference types)
             Console.WriteLine(version);
             return 0;
         }

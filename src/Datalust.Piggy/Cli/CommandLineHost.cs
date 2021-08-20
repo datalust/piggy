@@ -17,7 +17,7 @@ namespace Datalust.Piggy.Cli
 
         public int Run(string[] args)
         {
-            var ea = Assembly.GetEntryAssembly();
+            var ea = Assembly.GetEntryAssembly()!;
             var name = ea.GetName().Name;
 
             if (args.Length > 0)

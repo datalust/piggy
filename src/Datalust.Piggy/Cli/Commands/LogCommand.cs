@@ -24,15 +24,20 @@ namespace Datalust.Piggy.Cli.Commands
         {
             _loggingFeature.Configure();
 
+<<<<<<< HEAD
+=======
+            if (!(Require(_databaseFeature.Host, "host") && Require(_databaseFeature.Database, "database") &&
+                  Require(_usernamePasswordFeature.Username, "username") && Require(_usernamePasswordFeature.Password, "password")))
+                return -1;
+
+>>>>>>> 71bfa0c (Nullable reference types)
             try
             {
-                using (var connection = DatabaseConnector.Connect(_databaseFeature.Host, _databaseFeature.Database,
-                    _usernamePasswordFeature.Username, _usernamePasswordFeature.Password, false))
+                using var connection = DatabaseConnector.Connect(_databaseFeature.Host!, _databaseFeature.Database!,
+                    _usernamePasswordFeature.Username!, _usernamePasswordFeature.Password!, false);
+                foreach (var applied in AppliedChangeScriptLog.GetAppliedChangeScripts(connection))
                 {
-                    foreach (var applied in AppliedChangeScriptLog.GetAppliedChangeScripts(connection))
-                    {
-                        Console.WriteLine($"{applied.AppliedAt:o} {applied.AppliedBy} {applied.ScriptFile}");
-                    }
+                    Console.WriteLine($"{applied.AppliedAt:o} {applied.AppliedBy} {applied.ScriptFile}");
                 }
 
                 return 0;

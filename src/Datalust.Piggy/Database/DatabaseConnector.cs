@@ -27,6 +27,11 @@ namespace Datalust.Piggy.Database
         /// <returns>An open database connection.</returns>
         public static NpgsqlConnection Connect(string host, string database, string username, string password, bool createIfMissing)
         {
+<<<<<<< HEAD
+=======
+            var cstr = $"Host={host};Username={username};Password={password};Database={database}";
+            NpgsqlConnection? conn = null;
+>>>>>>> 71bfa0c (Nullable reference types)
             try
             {
                 return Connect($"Host={host};Username={username};Password={password};Database={database}");

@@ -19,7 +19,7 @@ namespace Datalust.Piggy.Database
             return _logger.IsEnabled(LogEventLevel.Debug);
         }
 
-        public override void Log(NpgsqlLogLevel level, int connectorId, string msg, Exception exception = null)
+        public override void Log(NpgsqlLogLevel level, int connectorId, string msg, Exception? exception = null)
         {
             _logger
                 .ForContext("ConnectorId", connectorId)
