@@ -4,8 +4,8 @@ namespace Datalust.Piggy.Cli.Features
 {
     class DatabaseFeature : CommandFeature
     {
-        public string Host { get; set; }
-        public string Database { get; set; }
+        public string? Host { get; set; }
+        public string? Database { get; set; }
 
         public override void Enable(OptionSet options)
         {

@@ -28,10 +28,10 @@ namespace Datalust.Piggy.Cli.Commands
 
             try
             {
-                using (var connection = DatabaseConnector.Connect(_databaseFeature.Host, _databaseFeature.Database,
-                    _usernamePasswordFeature.Username, _usernamePasswordFeature.Password, false))
+                using (var connection = DatabaseConnector.Connect(_databaseFeature.Host!, _databaseFeature.Database!,
+                    _usernamePasswordFeature.Username!, _usernamePasswordFeature.Password!, false))
                 {
-                    foreach (var pending in DatabaseStatus.GetPendingScripts(connection, _scriptRootFeature.ScriptRoot))
+                    foreach (var pending in DatabaseStatus.GetPendingScripts(connection, _scriptRootFeature.ScriptRoot!))
                     {
                         Console.WriteLine($"{pending.RelativeName}");
                     }

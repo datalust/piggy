@@ -88,7 +88,7 @@ namespace Datalust.Piggy.Cli
             }
         }
 
-        protected bool Require(string value, string name)
+        protected bool Require(string? value, string name)
         {
             if (!Requirement.IsNonEmpty(value))
             {

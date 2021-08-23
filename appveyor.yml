@@ -1,17 +1,17 @@
-version: 1.0.{build}
+version: 2.0.{build}
 skip_tags: true
 image: Visual Studio 2019
 build_script:
 - ps: ./Build.ps1
 test: off
 artifacts:
-- path: artifacts/piggy-*.msi
 - path: artifacts/piggy-*.tar.gz
+- path: artifacts/piggy-*.zip
 - path: artifacts/Datalust.Piggy.*.nupkg
 deploy:
 - provider: NuGet
   api_key:
-    secure: ErGkGoLMaZtkFgFcBIFjNn3twXKxEhO27F7vQGlx0m7ouCV3XdgGdSNERZOmdLLw
+    secure: qFvoUBcJYV2z0Q8x38cjFDdSdpPclcynF5/FcZbNmSDfQhqTy87D5vBZIp3HaO0I
   skip_symbols: true
   on:
     branch: main

@@ -30,6 +30,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+#nullable disable
+
 // Compile With:
 //   gmcs -debug+ -r:System.Core Options.cs -o:NDesk.Options.dll
 //   gmcs -debug+ -d:LINQ -r:System.Core Options.cs -o:NDesk.Options.dll

@@ -16,7 +16,7 @@ namespace Datalust.Piggy.Cli.Commands
         public static string GetVersion()
         {
             return typeof(VersionCommand).GetTypeInfo().Assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion;
         }
     }
 }
