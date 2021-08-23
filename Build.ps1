@@ -18,7 +18,7 @@ function Publish-Gzips($version)
 {
 	$rids = @("linux-x64", "win-x64", "osx-x64")
 	foreach ($rid in $rids) {
-		& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -f net5.0 -r $rid /p:VersionPrefix=$version
+		& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -f net5.0 -r $rid /p:VersionPrefix=$version /p:PublishSingleFile=true /p:SelfContained=true /p:PublishTrimmed=true
 	    if($LASTEXITCODE -ne 0) { exit 4 }
 	
 		# Make sure the archive contains a reasonable root filename
