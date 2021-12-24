@@ -2,7 +2,7 @@
 
 A friendly PostgreSQL script runner in the spirit of [DbUp](https://github.com/DbUp/DbUp).
 
-[![Build status](https://ci.appveyor.com/api/projects/status/889gkdpvjbjuhkfg?svg=true)](https://ci.appveyor.com/project/datalust/piggy)  [![Join the chat at https://gitter.im/datalust/piggy](https://img.shields.io/gitter/room/datalust/piggy.svg)](https://gitter.im/datalust/piggy)
+[![Build status](https://ci.appveyor.com/api/projects/status/889gkdpvjbjuhkfg?svg=true)](https://ci.appveyor.com/project/datalust/piggy)
 
 ### What is Piggy?
 
