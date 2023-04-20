@@ -55,18 +55,8 @@ namespace Datalust.Piggy.Database
             var host = conn.Host;
             if (conn.Host == null && !string.IsNullOrWhiteSpace(conn.ConnectionString))
             {
-                // e.g. Host=localhost;Username=postgres;Password=password-value;Database=database-name
-                const StringSplitOptions opt = StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries;
-
-                var dictionary = conn.ConnectionString.ToLowerInvariant()
-                    .Split(';', opt)
-                    .Where(item => item.Contains('='))
-                    .Select(item => item.Split('=', 2))
-                    .ToDictionary(array => array[0].Trim(),
-                        array => array[1].Trim(),
-                        StringComparer.InvariantCultureIgnoreCase);
-
-                if (dictionary.TryGetValue("host", out var value)) host = value;
+                var parts = ConnectionStringParser.Parse(conn.ConnectionString);
+                if (parts.TryGetValue("Host", out var value)) host = value;
             }
 
             Log.Information("Connecting to database {Database} on {Host}", conn.Database, host);
