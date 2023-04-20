@@ -1,4 +1,6 @@
 using System;
+using System.Data.Common;
+using System.Linq;
 using Npgsql;
 using Serilog;
 using Serilog.Extensions.Logging;
@@ -50,8 +52,22 @@ namespace Datalust.Piggy.Database
             if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
 
             var conn = new NpgsqlConnection(connectionString);
-            
-            Log.Information("Connecting to database {Database} on {Host}", conn.Database, conn.Host);
+            var host = conn.Host;
+
+            // e.g. Host=localhost;Username=postgres;Password=password-value;Database=database-name
+            if (conn.Host == null && !string.IsNullOrWhiteSpace(conn.ConnectionString))
+            {
+                const StringSplitOptions opt = StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries;
+
+                var dictionary = conn.ConnectionString.Split(';', opt)
+                    .Where(s => s.Contains('='))
+                    .Select(s => s.Split('=', 2))
+                    .ToDictionary(strings => strings[0].Trim(), strings => strings[1].Trim());
+
+                if (dictionary.TryGetValue("Host", out var value)) host = value;
+            }
+
+            Log.Information("Connecting to database {Database} on {Host}", conn.Database, host);
 
             try
             {
