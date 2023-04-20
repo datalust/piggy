@@ -1,7 +1,7 @@
 using System;
 using Npgsql;
-using Npgsql.Logging;
 using Serilog;
+using Serilog.Extensions.Logging;
 
 namespace Datalust.Piggy.Database
 {
@@ -12,7 +12,7 @@ namespace Datalust.Piggy.Database
     {
         static DatabaseConnector()
         {
-            NpgsqlLogManager.Provider = new SerilogLoggingProvider();
+            NpgsqlLoggingConfiguration.InitializeLogging(new SerilogLoggerFactory());
         }
 
         /// <summary>
