@@ -52,11 +52,11 @@ namespace Datalust.Piggy.Database
             if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
 
             var conn = new NpgsqlConnection(connectionString);
-            var host = conn.Host;
 
-            // e.g. Host=localhost;Username=postgres;Password=password-value;Database=database-name
+            var host = conn.Host;
             if (conn.Host == null && !string.IsNullOrWhiteSpace(conn.ConnectionString))
             {
+                // e.g. Host=localhost;Username=postgres;Password=password-value;Database=database-name
                 const StringSplitOptions opt = StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries;
 
                 var dictionary = conn.ConnectionString.Split(';', opt)
