@@ -1,17 +1,26 @@
-using System.Reflection;
+using System;
 using Autofac;
 using Datalust.Piggy.Cli;
+using Datalust.Piggy.Cli.Commands;
 
 namespace Datalust.Piggy
 {
-    class PiggyModule : Autofac.Module
+    public class PiggyModule : Module
     {
+        public static readonly Type[] RegisteredCommands =
+        {
+            typeof(BaselineCommand),
+            typeof(HelpCommand),
+            typeof(LogCommand),
+            typeof(PendingCommand),
+            typeof(UpdateCommand),
+            typeof(VersionCommand)
+        };
+
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<CommandLineHost>();
-            builder.RegisterAssemblyTypes(typeof(Program).GetTypeInfo().Assembly)
-                .As<Command>()
-                .WithMetadataFrom<CommandAttribute>();
+            builder.RegisterTypes(RegisteredCommands).As<Command>().WithMetadataFrom<CommandAttribute>();
         }
     }
 }
