@@ -1,15 +1,30 @@
+$ErrorActionPreference = 'Stop'
+
 Write-Output "build: Build started"
 Push-Location $PSScriptRoot
 
 Write-Output "build: Loading sdk.version from global.json"
 $json = Get-Content 'global.json' | Out-String | ConvertFrom-Json
+$requiredSdkVersion = $json.sdk.version
+Write-Output "build: Required sdk.version is $requiredSdkVersion"
 
-$sdkVersion = $json.sdk.version
-Write-Output "build: Downloading .NET SDK $sdkVersion"
+Write-Output "build: Downloading .NET SDK $requiredSdkVersion"
 Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1'
 
-Write-Output "build: Installing .NET SDK $sdkVersion"
-./dotnet-install.ps1 -Version $sdkVersion
+Write-Output "build: Installing .NET SDK $requiredSdkVersion"
+./dotnet-install.ps1 -Version $requiredSdkVersion
+
+Write-Output "build: Checking installed .NET SDK versions"
+$installedSdkVersions = & dotnet --list-sdks
+Write-Output "build: Installed .NET SDK versions:"
+Write-Output $installedSdkVersions
+
+if($installedSdkVersions.Contains($requiredSdkVersion) -eq 'False') {
+	Write-Output "build: Didn't find .NET SDK $requiredSdkVersion installed"
+	Write-Output $installedSdkVersions
+	exit 1
+}
+Write-Output "build: .NET SDK $requiredSdkVersion installed and available"
 
 if(Test-Path .\artifacts) {
 	Write-Output "build: Cleaning .\artifacts"
@@ -18,7 +33,7 @@ if(Test-Path .\artifacts) {
 
 Write-Output "build: Restoring .NET packages (--no-cache)"
 & dotnet restore --no-cache
-if($LASTEXITCODE -ne 0) { exit 1 }
+if($LASTEXITCODE -ne 0) { exit 2 }
 
 Write-Output "build: Calculating `$version"
 $version = @{ $true = $env:APPVEYOR_BUILD_VERSION; $false = "99.99.99" }[$NULL -ne $env:APPVEYOR_BUILD_VERSION];
@@ -32,7 +47,7 @@ Write-Output "build: Version suffix is $suffix"
 
 Write-Output "build: Testing project"
 & dotnet test ./test/Datalust.Piggy.Tests/Datalust.Piggy.Tests.csproj -c Release /p:VersionPrefix=$version
-if($LASTEXITCODE -ne 0) { exit 2 }
+if($LASTEXITCODE -ne 0) { exit 3 }
 
 Write-Output "build: Creating artifacts directory"
 New-Item -ItemType "directory" -Name "artifacts"
@@ -46,22 +61,22 @@ foreach ($rid in $rids) {
 	} else {
 		& dotnet publish src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -f net7.0 -r $rid /p:VersionPrefix=$version /p:PublishSingleFile=true /p:SelfContained=true /p:PublishTrimmed=true
 	}
-	if($LASTEXITCODE -ne 0) { exit 3 }
+	if($LASTEXITCODE -ne 0) { exit 4 }
 
 	# Make sure the archive contains a reasonable root filename
 	mv ./src/Datalust.Piggy/bin/Release/net7.0/$rid/publish/ ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
 
 	if ($rid -ne "win-x64") {
 		& ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
-		if($LASTEXITCODE -ne 0) { exit 4 }
+		if($LASTEXITCODE -ne 0) { exit 5 }
 
 		& ./build/7-zip/7za.exe a -tgzip ./artifacts/piggy-$version-$rid.tar.gz piggy-$version-$rid.tar
-		if($LASTEXITCODE -ne 0) { exit 5 }
+		if($LASTEXITCODE -ne 0) { exit 6 }
 
 		rm piggy-$version-$rid.tar
 	} else {
 		& ./build/7-zip/7za.exe a -tzip ./artifacts/piggy-$version-$rid.zip ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
-		if($LASTEXITCODE -ne 0) { exit 6 }
+		if($LASTEXITCODE -ne 0) { exit 7 }
 	}
 
 	# Back to the original directory name
@@ -69,6 +84,6 @@ foreach ($rid in $rids) {
 }
 
 & dotnet pack src/Datalust.Piggy/Datalust.Piggy.csproj -c Release -o $PSScriptRoot/artifacts /p:VersionPrefix=$version /p:OutputType=Library
-if($LASTEXITCODE -ne 0) { exit 7 }
+if($LASTEXITCODE -ne 0) { exit 8 }
 
 Pop-Location
