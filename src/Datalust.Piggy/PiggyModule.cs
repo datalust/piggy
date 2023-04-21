@@ -5,7 +5,7 @@ using Datalust.Piggy.Cli.Commands;
 
 namespace Datalust.Piggy
 {
-    public class PiggyModule : Module
+    class PiggyModule : Module
     {
         public static readonly Type[] RegisteredCommands =
         {
