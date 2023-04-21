@@ -1,6 +1,16 @@
 Write-Output "build: Build started"
 Push-Location $PSScriptRoot
 
+Write-Output "build: Loading sdk.version from global.json"
+$json = Get-Content 'global.json' | Out-String | ConvertFrom-Json
+
+$sdkVersion = $json.sdk.version
+Write-Output "build: Downloading .NET SDK $sdkVersion"
+Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1'
+
+Write-Output "build: Installing .NET SDK $sdkVersion"
+./dotnet-install.ps1 -Version $sdkVersion
+
 if(Test-Path .\artifacts) {
 	Write-Output "build: Cleaning .\artifacts"
 	Remove-Item .\artifacts -Force -Recurse
