@@ -1,4 +1,4 @@
-version: 3.0.{build}
+version: '{build}'
 skip_tags: true
 image: Visual Studio 2022
 build_script:
@@ -14,11 +14,11 @@ deploy:
     secure: qFvoUBcJYV2z0Q8x38cjFDdSdpPclcynF5/FcZbNmSDfQhqTy87D5vBZIp3HaO0I
   skip_symbols: true
   on:
-    branch: main
+    branch: /^(main|dev)$/
 - provider: GitHub
   auth_token:
     secure: Bo3ypKpKFxinjR9ShkNekNvkob2iklHJU+UlYyfHtcFFIAa58SV2TkEd0xWxz633
   artifact: /piggy-.*\.(msi|tar\.gz)/
   tag: v$(appveyor_build_version)
   on:
-    branch: main
+    branch: /^(main|dev)$/
