@@ -1,7 +1,8 @@
 using System;
+using System.Linq;
 using Npgsql;
-using Npgsql.Logging;
 using Serilog;
+using Serilog.Extensions.Logging;
 
 namespace Datalust.Piggy.Database
 {
@@ -12,7 +13,7 @@ namespace Datalust.Piggy.Database
     {
         static DatabaseConnector()
         {
-            NpgsqlLogManager.Provider = new SerilogLoggingProvider();
+            NpgsqlLoggingConfiguration.InitializeLogging(new SerilogLoggerFactory());
         }
 
         /// <summary>
@@ -50,8 +51,15 @@ namespace Datalust.Piggy.Database
             if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
 
             var conn = new NpgsqlConnection(connectionString);
-            
-            Log.Information("Connecting to database {Database} on {Host}", conn.Database, conn.Host);
+
+            var host = conn.Host;
+            if (conn.Host == null && !string.IsNullOrWhiteSpace(conn.ConnectionString))
+            {
+                var parts = ConnectionStringParser.Parse(conn.ConnectionString);
+                if (parts.TryGetValue("Host", out var value)) host = value;
+            }
+
+            Log.Information("Connecting to database {Database} on {Host}", conn.Database, host);
 
             try
             {

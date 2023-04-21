@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>A friendly PostgreSQL script runner in the spirit of DbUp.</Description>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>piggy</AssemblyName>
     <ApplicationIcon>..\..\asset\Piggy-Icon-128px.ico</ApplicationIcon>
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
@@ -16,6 +16,8 @@
     <PackageIcon>Piggy-Icon-128px.png</PackageIcon>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
+    <TrimMode>partial</TrimMode>
+    <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,13 +31,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="dapper" Version="2.0.90" />
-    <PackageReference Include="npgsql" Version="5.0.7" />
-    <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
-    <PackageReference Include="Autofac" Version="6.2.0" />
-    <PackageReference Include="serilog.sinks.seq" Version="5.0.1" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="dapper" Version="2.0.123" />
+    <PackageReference Include="npgsql" Version="7.0.2" />
+    <PackageReference Include="Serilog" Version="2.12.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Autofac" Version="7.0.1" />
+    <PackageReference Include="serilog.sinks.seq" Version="5.2.2" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Datalust.Piggy.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  
 </Project>
