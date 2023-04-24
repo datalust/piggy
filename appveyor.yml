@@ -5,9 +5,9 @@ build_script:
 - ps: ./Build.ps1
 test: off
 artifacts:
-- path: artifacts/piggy-*.tar.gz
-- path: artifacts/piggy-*.zip
-- path: artifacts/Datalust.Piggy.*.nupkg
+- path: .artifacts/piggy-*.tar.gz
+- path: .artifacts/piggy-*.zip
+- path: .artifacts/Datalust.Piggy.*.nupkg
 deploy:
 - provider: NuGet
   api_key:
