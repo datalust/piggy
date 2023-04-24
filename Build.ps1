@@ -26,7 +26,7 @@ if($installedSdkVersions -inotmatch $requiredSdkVersion) {
 }
 Write-Output "build: .NET SDK $requiredSdkVersion is installed and available for use"
 
-$artifacts = "artifacts"
+$artifacts = ".artifacts"
 if(Test-Path .\$artifacts) {
 	Write-Output "build: Cleaning .\$artifacts"
 	Remove-Item .\$artifacts -Force -Recurse
