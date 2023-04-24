@@ -20,7 +20,7 @@ Write-Output "build: Installed .NET SDK versions:"
 Write-Output $installedSdkVersions
 
 if($installedSdkVersions -inotmatch $requiredSdkVersion) {
-	Write-Output "build: Didn't find .NET SDK $requiredSdkVersion installed"
+	Write-Output "build: Did not find .NET SDK $requiredSdkVersion installed"
 	Write-Output $installedSdkVersions
 	exit 1
 }

@@ -18,7 +18,7 @@ deploy:
 - provider: GitHub
   auth_token:
     secure: Bo3ypKpKFxinjR9ShkNekNvkob2iklHJU+UlYyfHtcFFIAa58SV2TkEd0xWxz633
-  artifact: /piggy-.*\.(msi|tar\.gz)/
+  artifact: /piggy-.*\.(zip|tar\.gz)/
   tag: v$(appveyor_build_version)
   on:
     branch: /^(main|dev)$/
