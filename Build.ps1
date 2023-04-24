@@ -46,8 +46,8 @@ $project = $projectDir + $projectFile
 Write-Output "build: Project .csproj file is located at $project"
 
 Write-Output "build: Getting Version from $project"
-$xml = [Xml] (Get-Content $project)
-$prefix = [Version] $xml.Project.PropertyGroup.VersionPrefix.ToString()
+$xml = [Xml](Get-Content $project)
+$prefix = [Version]$xml.Project.PropertyGroup.VersionPrefix.ToString()
 Write-Output "build: Version prefix is $prefix"
 
 Write-Output "build: Calculating `$branch, `$revision, and `$suffix"
@@ -76,7 +76,7 @@ foreach ($rid in $rids) {
 	if($LASTEXITCODE -ne 0) { exit 4 }
 
 	# Make sure the archive contains a reasonable root filename.
-	mv ./src/Datalust.Piggy/bin/Release/net7.0/$rid/publish/ ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
+	Move-Item ./src/Datalust.Piggy/bin/Release/net7.0/$rid/publish/ ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
 
 	if ($rid -ne "win-x64") {
 		& ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
@@ -85,14 +85,14 @@ foreach ($rid in $rids) {
 		& ./build/7-zip/7za.exe a -tgzip ./$artifacts/piggy-$version-$rid.tar.gz piggy-$version-$rid.tar
 		if($LASTEXITCODE -ne 0) { exit 6 }
 
-		rm piggy-$version-$rid.tar
+		Remove-Item piggy-$version-$rid.tar
 	} else {
 		& ./build/7-zip/7za.exe a -tzip ./$artifacts/piggy-$version-$rid.zip ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
 		if($LASTEXITCODE -ne 0) { exit 7 }
 	}
 
 	# Move back to the original directory name.
-	mv ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/ ./src/Datalust.Piggy/bin/Release/net7.0/$rid/publish/
+	Move-Item ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/ ./src/Datalust.Piggy/bin/Release/net7.0/$rid/publish/
 }
 
 Write-Output "build: Packing library into .nupkg"
@@ -104,3 +104,4 @@ if ($suffix) {
 if($LASTEXITCODE -ne 0) { exit 8 }
 
 Pop-Location
+Write-Output "build: completed successfully"
