@@ -2,22 +2,24 @@
 
   <PropertyGroup>
     <Description>A friendly PostgreSQL script runner in the spirit of DbUp.</Description>
-    <OutputType>Exe</OutputType>
+    <OutputType>exe</OutputType>
+    <VersionPrefix>2.0.0</VersionPrefix>
     <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>piggy</AssemblyName>
     <ApplicationIcon>..\..\asset\Piggy-Icon-128px.ico</ApplicationIcon>
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
-    <GenerateAssemblyInformationalVersionAttribute>True</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>true</GenerateAssemblyInformationalVersionAttribute>
     <Authors>Datalust and Contributors</Authors>
     <PackageId>Datalust.Piggy</PackageId>
     <PackageTags>postgresql</PackageTags>
     <PackageProjectUrl>https://github.com/datalust/piggy</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>    
     <PackageIcon>Piggy-Icon-128px.png</PackageIcon>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
     <TrimMode>partial</TrimMode>
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

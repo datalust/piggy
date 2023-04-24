@@ -45,7 +45,7 @@ dlldata.c
 # .NET Core
 project.lock.json
 project.fragment.lock.json
-artifacts/
+.artifacts/
 **/Properties/launchSettings.json
 
 *_i.c
@@ -286,3 +286,6 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# ignore downloaded dotnet-install.ps1 used in .\Build.ps1
+dotnet-install.ps1
