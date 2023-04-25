@@ -21,4 +21,4 @@ deploy:
   artifact: /piggy-.*\.(zip|tar\.gz)/
   tag: v$(appveyor_build_version)
   on:
-    branch: /^(main|dev)$/
+    branch: main
