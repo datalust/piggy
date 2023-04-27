@@ -37,15 +37,15 @@ Write-Output "build: Restoring .NET packages (--no-cache)"
 if($LASTEXITCODE -ne 0) { exit 2 }
 
 Write-Output "build: Checking for vulnerable packages..."
-& dotnet list package --vulnerable --include-transitive
+& dotnet list package --vulnerable
 if($LASTEXITCODE -ne 0) { exit 3 }
 
 Write-Output "Checking for deprecated packages..."
-& dotnet list package --deprecated --include-transitive
+& dotnet list package --deprecated
 if($LASTEXITCODE -ne 0) { exit 4 }
 
 Write-Output "Checking for outdated packages..."
-& dotnet list package --outdated --include-transitive
+& dotnet list package --outdated
 if($LASTEXITCODE -ne 0) { exit 5 }
 
 Write-Output "build: Testing project"
