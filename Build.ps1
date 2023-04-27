@@ -36,9 +36,21 @@ Write-Output "build: Restoring .NET packages (--no-cache)"
 & dotnet restore --no-cache
 if($LASTEXITCODE -ne 0) { exit 2 }
 
+Write-Output "build: Checking for vulnerable packages..."
+& dotnet list package --vulnerable --include-transitive
+if($LASTEXITCODE -ne 0) { exit 3 }
+
+Write-Output "Checking for deprecated packages..."
+& dotnet list package --deprecated --include-transitive
+if($LASTEXITCODE -ne 0) { exit 4 }
+
+Write-Output "Checking for outdated packages..."
+& dotnet list package --outdated --include-transitive
+if($LASTEXITCODE -ne 0) { exit 5 }
+
 Write-Output "build: Testing project"
 & dotnet test ./test/Datalust.Piggy.Tests/Datalust.Piggy.Tests.csproj -c Release
-if($LASTEXITCODE -ne 0) { exit 3 }
+if($LASTEXITCODE -ne 0) { exit 6 }
 
 $projectDir = "src/Datalust.Piggy/"
 $projectFile = "Datalust.Piggy.csproj"
@@ -73,22 +85,22 @@ foreach ($rid in $rids) {
 	} else {
 		& dotnet publish $project -c Release -f net7.0 -r $rid /p:PublishSingleFile=true /p:SelfContained=true /p:PublishTrimmed=true
 	}
-	if($LASTEXITCODE -ne 0) { exit 4 }
+	if($LASTEXITCODE -ne 0) { exit 7 }
 
 	# Make sure the archive contains a reasonable root filename.
 	Move-Item ./src/Datalust.Piggy/bin/Release/net7.0/$rid/publish/ ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
 
 	if ($rid -ne "win-x64") {
 		& ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
-		if($LASTEXITCODE -ne 0) { exit 5 }
+		if($LASTEXITCODE -ne 0) { exit 8 }
 
 		& ./build/7-zip/7za.exe a -tgzip ./$artifacts/piggy-$version-$rid.tar.gz piggy-$version-$rid.tar
-		if($LASTEXITCODE -ne 0) { exit 6 }
+		if($LASTEXITCODE -ne 0) { exit 9 }
 
 		Remove-Item piggy-$version-$rid.tar
 	} else {
 		& ./build/7-zip/7za.exe a -tzip ./$artifacts/piggy-$version-$rid.zip ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
-		if($LASTEXITCODE -ne 0) { exit 7 }
+		if($LASTEXITCODE -ne 0) { exit 10 }
 	}
 
 	# Move back to the original directory name.
@@ -101,7 +113,7 @@ if ($suffix) {
 } else {
 	& dotnet pack $project -c Release -o $PSScriptRoot/$artifacts /p:OutputType=Library
 }
-if($LASTEXITCODE -ne 0) { exit 8 }
+if($LASTEXITCODE -ne 0) { exit 11 }
 
 Pop-Location
 Write-Output "build: completed successfully"
