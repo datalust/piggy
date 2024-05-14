@@ -108,7 +108,7 @@ For development and test automation purposes, the core script runner is also pac
 ```csharp
 // dotnet add package Datalust.Piggy
 var connectionString = // Npgsql connection string
-using (var connection = DatabaseConnector.Connect(connectionString, createIfMissing: true))
+using (var connection = DatabaseConnector.Connect(connectionString))
 {
     UpdateSession.ApplyChangeScripts(connection, "./db", new Dictionary<string, string>());
 }

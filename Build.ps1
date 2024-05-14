@@ -1,5 +1,7 @@
 $ErrorActionPreference = 'Stop'
 
+$tfm = "net8.0"
+
 Write-Output "build: Build started"
 Push-Location $PSScriptRoot
 
@@ -76,37 +78,6 @@ Write-Output "build: Version is $version"
 Write-Output "build: Creating artifacts directory at .\$artifacts"
 New-Item -ItemType "directory" -Name $artifacts
 
-$rids = @("win-x64", "linux-x64", "osx-x64", "osx-arm64")
-foreach ($rid in $rids) {
-	Write-Output "build: Building a $rid build of version $version"
-
-	if ($suffix) {
-		& dotnet publish $project -c Release -f net7.0 -r $rid /p:PublishSingleFile=true /p:SelfContained=true /p:PublishTrimmed=true --version-suffix=$suffix
-	} else {
-		& dotnet publish $project -c Release -f net7.0 -r $rid /p:PublishSingleFile=true /p:SelfContained=true /p:PublishTrimmed=true
-	}
-	if($LASTEXITCODE -ne 0) { exit 7 }
-
-	# Make sure the archive contains a reasonable root filename.
-	Move-Item ./src/Datalust.Piggy/bin/Release/net7.0/$rid/publish/ ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
-
-	if ($rid -ne "win-x64") {
-		& ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
-		if($LASTEXITCODE -ne 0) { exit 8 }
-
-		& ./build/7-zip/7za.exe a -tgzip ./$artifacts/piggy-$version-$rid.tar.gz piggy-$version-$rid.tar
-		if($LASTEXITCODE -ne 0) { exit 9 }
-
-		Remove-Item piggy-$version-$rid.tar
-	} else {
-		& ./build/7-zip/7za.exe a -tzip ./$artifacts/piggy-$version-$rid.zip ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/
-		if($LASTEXITCODE -ne 0) { exit 10 }
-	}
-
-	# Move back to the original directory name.
-	Move-Item ./src/Datalust.Piggy/bin/Release/net7.0/$rid/piggy-$version-$rid/ ./src/Datalust.Piggy/bin/Release/net7.0/$rid/publish/
-}
-
 Write-Output "build: Packing library into .nupkg"
 if ($suffix) {
 	& dotnet pack $project -c Release -o $PSScriptRoot/$artifacts /p:OutputType=Library --version-suffix=$suffix
@@ -114,6 +85,37 @@ if ($suffix) {
 	& dotnet pack $project -c Release -o $PSScriptRoot/$artifacts /p:OutputType=Library
 }
 if($LASTEXITCODE -ne 0) { exit 11 }
+
+$rids = @("win-x64", "linux-x64", "osx-x64", "osx-arm64")
+foreach ($rid in $rids) {
+	Write-Output "build: Building a $rid build of version $version"
+
+	if ($suffix) {
+		& dotnet publish $project -c Release -f $tfm -r $rid /p:PublishSingleFile=true /p:SelfContained=true /p:PublishTrimmed=true --version-suffix=$suffix
+	} else {
+		& dotnet publish $project -c Release -f $tfm -r $rid /p:PublishSingleFile=true /p:SelfContained=true /p:PublishTrimmed=true
+	}
+	if($LASTEXITCODE -ne 0) { exit 7 }
+
+	# Make sure the archive contains a reasonable root filename.
+	Move-Item ./src/Datalust.Piggy/bin/Release/$tfm/$rid/publish/ ./src/Datalust.Piggy/bin/Release/$tfm/$rid/piggy-$version-$rid/
+
+	if ($rid -ne "win-x64") {
+		& ./build/7-zip/7za.exe a -ttar piggy-$version-$rid.tar ./src/Datalust.Piggy/bin/Release/$tfm/$rid/piggy-$version-$rid/
+		if($LASTEXITCODE -ne 0) { exit 8 }
+
+		& ./build/7-zip/7za.exe a -tgzip ./$artifacts/piggy-$version-$rid.tar.gz piggy-$version-$rid.tar
+		if($LASTEXITCODE -ne 0) { exit 9 }
+
+		Remove-Item piggy-$version-$rid.tar
+	} else {
+		& ./build/7-zip/7za.exe a -tzip ./$artifacts/piggy-$version-$rid.zip ./src/Datalust.Piggy/bin/Release/$tfm/$rid/piggy-$version-$rid/
+		if($LASTEXITCODE -ne 0) { exit 10 }
+	}
+
+	# Move back to the original directory name.
+	Move-Item ./src/Datalust.Piggy/bin/Release/$tfm/$rid/piggy-$version-$rid/ ./src/Datalust.Piggy/bin/Release/$tfm/$rid/publish/
+}
 
 Pop-Location
 Write-Output "build: completed successfully"
