@@ -1,7 +1,7 @@
 ![Piggy](https://raw.githubusercontent.com/datalust/piggy/master/asset/Piggy-400px.png)
 
 A friendly PostgreSQL script runner in the spirit of [DbUp](https://github.com/DbUp/DbUp).
-
+[sln](sln)
 [![Build status](https://ci.appveyor.com/api/projects/status/889gkdpvjbjuhkfg?svg=true)](https://ci.appveyor.com/project/datalust/piggy)
 
 ### What is Piggy?
@@ -108,7 +108,7 @@ For development and test automation purposes, the core script runner is also pac
 ```csharp
 // dotnet add package Datalust.Piggy
 var connectionString = // Npgsql connection string
-using (var connection = DatabaseConnector.Connect(connectionString, createIfMissing: true)
+using (var connection = DatabaseConnector.Connect(connectionString))
 {
     UpdateSession.ApplyChangeScripts(connection, "./db", new Dictionary<string, string>());
 }
