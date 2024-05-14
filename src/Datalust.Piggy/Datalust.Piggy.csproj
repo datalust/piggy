@@ -4,7 +4,7 @@
     <Description>A friendly PostgreSQL script runner in the spirit of DbUp.</Description>
     <OutputType>exe</OutputType>
     <VersionPrefix>2.0.0</VersionPrefix>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>piggy</AssemblyName>
     <ApplicationIcon>..\..\asset\Piggy-Icon-128px.ico</ApplicationIcon>
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
@@ -17,36 +17,25 @@
     <PackageIcon>Piggy-Icon-128px.png</PackageIcon>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
-    <TrimMode>partial</TrimMode>
-    <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\asset\Piggy-Icon-128px.png" Pack="true" Visible="false" PackagePath="" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Attribution\*.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <InternalsVisibleTo Include="Datalust.Piggy.Tests" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="dapper" Version="2.0.123" />
+    <PackageReference Include="dapper" Version="2.1.35" />
     <PackageReference Include="npgsql" Version="8.0.3" />
-    <PackageReference Include="Serilog" Version="2.12.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-    <PackageReference Include="Autofac" Version="7.0.1" />
-    <PackageReference Include="serilog.sinks.seq" Version="5.2.2" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>Datalust.Piggy.Tests</_Parameter1>
-    </AssemblyAttribute>
+    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
+    <PackageReference Include="Autofac" Version="8.0.0" />
+    <PackageReference Include="serilog.sinks.seq" Version="7.0.1" />
   </ItemGroup>
   
 </Project>
