@@ -61,7 +61,7 @@ Write-Output "build: Project .csproj file is located at $project"
 
 Write-Output "build: Getting Version from $project"
 $xml = [Xml](Get-Content $project)
-$prefix = [Version]$xml.Project.PropertyGroup.VersionPrefix.ToString()
+$prefix = [Version]$xml.Project.PropertyGroup[0].VersionPrefix.ToString()
 Write-Output "build: Version prefix is $prefix"
 
 Write-Output "build: Calculating `$branch, `$revision, and `$suffix"
