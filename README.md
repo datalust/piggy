@@ -23,7 +23,7 @@ dotnet tool install --global Datalust.Piggy.Cli
 The executable is called `piggy`. Test that the installation was successful with:
 
 ```
-piggy version
+piggy --version
 ```
 
 #### Executable binaries
