@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>A friendly PostgreSQL script runner in the spirit of DbUp.</Description>
-    <OutputType>exe</OutputType>
+    <OutputType>Exe</OutputType>
     <VersionPrefix>2.0.0</VersionPrefix>
     <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>piggy</AssemblyName>
@@ -28,6 +28,10 @@
     <ToolCommandName>piggy</ToolCommandName>
     <RollForward>Major</RollForward>
   </PropertyGroup>
+  
+  <ItemGroup Condition=" '$(OutputType)' != 'Exe' ">
+    <Compile Remove="Program.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\asset\Piggy-Icon-128px.png" Pack="true" Visible="false" PackagePath="" />
