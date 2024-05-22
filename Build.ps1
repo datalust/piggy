@@ -86,14 +86,14 @@ if ($suffix) {
 }
 if($LASTEXITCODE -ne 0) { exit 11 }
 
-# Stale artifacts cause problems, we change the output type but MSBuild doesn't notice.
-& dotnet clean $project
-if($LASTEXITCODE -ne 0) { exit 11 }
-
 Write-Output "build: Packing executable into dotnet tool Datalust.Piggy.Cli.*.nupkg"
 if ($suffix) {
+	& dotnet build $project --no-incremental -c Release -o $PSScriptRoot/$artifacts /p:PackAsTool=True --version-suffix=$suffix
+    if($LASTEXITCODE -ne 0) { exit 11 }
 	& dotnet pack $project -c Release -o $PSScriptRoot/$artifacts /p:PackAsTool=True --version-suffix=$suffix
 } else {
+	& dotnet build $project --no-incremental -c Release -o $PSScriptRoot/$artifacts /p:PackAsTool=True
+    if($LASTEXITCODE -ne 0) { exit 11 }
 	& dotnet pack $project -c Release -o $PSScriptRoot/$artifacts /p:PackAsTool=True
 }
 if($LASTEXITCODE -ne 0) { exit 11 }
