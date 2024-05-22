@@ -10,7 +10,38 @@ Piggy is a simple command-line tool for managing schema and data changes to Post
 
 ### Installation
 
-Piggy is available for Windows, macOS and Linux from [the releases page](https://github.com/datalust/piggy/releases). If your platform of choice isn't listed, please [raise an issue here](https://github.com/datalust/piggy/issues) so that we can add it.
+Piggy is available as a .NET tool package, as standalone binaries, and as a C&sharp; library that can be used directly in .NET applications.
+
+#### `dotnet tool`
+
+Piggy is distributed as a [.NET tool package called _Datalust.Piggy.Cli_](https://nuget.org/packages/datalust.piggy.cli), which can be installed using:
+
+```
+dotnet tool install --global Datalust.Piggy.Cli
+```
+
+The executable is called `piggy`. Test that the installation was successful with:
+
+```
+piggy version
+```
+
+#### Executable binaries
+
+Pre-built, native, self-contained Piggy binaries are available for Windows, macOS and Linux from [the releases page](https://github.com/datalust/piggy/releases). If your platform of choice isn't listed, please [raise an issue here](https://github.com/datalust/piggy/issues) so that we can add it.
+
+#### C# library
+
+For development and test automation purposes, the core script runner is also packaged as a C&sharp; API and [published to NuGet as _Datalust.Piggy_](https://nuget.org/packages/datalust.piggy).
+
+```csharp
+// dotnet add package Datalust.Piggy
+var connectionString = // Npgsql connection string
+using (var connection = DatabaseConnector.Connect(connectionString))
+{
+    UpdateSession.ApplyChangeScripts(connection, "./db", new Dictionary<string, string>());
+}
+```
 
 ### Workflow
 
@@ -99,17 +130,4 @@ Available commands are:
   --version  Print the current executable version
 
 Type `piggy help <command>` for detailed help
-```
-
-### C&sharp; API
-
-For development and test automation purposes, the core script runner is also packaged as a C&sharp; API and published to NuGet as _Datalust.Piggy_.
-
-```csharp
-// dotnet add package Datalust.Piggy
-var connectionString = // Npgsql connection string
-using (var connection = DatabaseConnector.Connect(connectionString))
-{
-    UpdateSession.ApplyChangeScripts(connection, "./db", new Dictionary<string, string>());
-}
 ```

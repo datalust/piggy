@@ -61,7 +61,7 @@ Write-Output "build: Project .csproj file is located at $project"
 
 Write-Output "build: Getting Version from $project"
 $xml = [Xml](Get-Content $project)
-$prefix = [Version]$xml.Project.PropertyGroup.VersionPrefix.ToString()
+$prefix = [Version]$xml.Project.PropertyGroup[0].VersionPrefix.ToString()
 Write-Output "build: Version prefix is $prefix"
 
 Write-Output "build: Calculating `$branch, `$revision, and `$suffix"
@@ -78,11 +78,19 @@ Write-Output "build: Version is $version"
 Write-Output "build: Creating artifacts directory at .\$artifacts"
 New-Item -ItemType "directory" -Name $artifacts
 
-Write-Output "build: Packing library into .nupkg"
+Write-Output "build: Packing library into Datalust.Piggy.*.nupkg"
 if ($suffix) {
 	& dotnet pack $project -c Release -o $PSScriptRoot/$artifacts /p:OutputType=Library --version-suffix=$suffix
 } else {
 	& dotnet pack $project -c Release -o $PSScriptRoot/$artifacts /p:OutputType=Library
+}
+if($LASTEXITCODE -ne 0) { exit 11 }
+
+Write-Output "build: Packing executable into dotnet tool Datalust.Piggy.Cli.*.nupkg"
+if ($suffix) {
+	& dotnet pack $project -c Release -o $PSScriptRoot/$artifacts /p:PackAsTool=True --version-suffix=$suffix
+} else {
+	& dotnet pack $project -c Release -o $PSScriptRoot/$artifacts /p:PackAsTool=True
 }
 if($LASTEXITCODE -ne 0) { exit 11 }
 

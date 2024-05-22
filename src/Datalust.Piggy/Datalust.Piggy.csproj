@@ -22,6 +22,12 @@
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(PackAsTool)' == 'True' ">
+    <PackageId>Datalust.Piggy.Cli</PackageId>
+    <ToolCommandName>piggy</ToolCommandName>
+    <RollForward>Major</RollForward>
+  </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\asset\Piggy-Icon-128px.png" Pack="true" Visible="false" PackagePath="" />
