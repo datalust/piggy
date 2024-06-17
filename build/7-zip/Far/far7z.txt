@@ -36,6 +36,12 @@ To install 7-Zip FAR Plugin:
   3) Install 7-Zip, or copy 7z.dll from 7-Zip to Program Files\Far\Plugins\7-Zip\
   4) Restart FAR.
 
+Also you must enable "OEM plugin support" option in FAR Manager:
+
+  1) F9 / Options / Plugins manager settings / check on "OEM plugin support".
+  2) F9 / Options / Save setup.
+  4) Restart FAR
+
 You can open archives with one of the following ways:
   * Pressing Enter.
   * Pressing Ctrl-PgDown.

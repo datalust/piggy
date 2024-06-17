@@ -2,8 +2,8 @@
 .PluginContents=Плагин 7-Zip
 
 @Contents
-$^#7-Zip Plugin 16.04#
-$^#Copyright (c) 1999-2016 Igor Pavlov#
+$^#7-Zip Plugin 22.01#
+$^#Copyright (c) 1999-2022 Igor Pavlov#
     Этот модуль FAR позволяет работать с #архивами#. Для пользователя
 файлы в архивах не отличаются от файлов в папках.
 

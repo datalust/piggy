@@ -25,7 +25,7 @@ namespace Datalust.Piggy.Cli.Commands
             _scriptRootFeature = Enable<ScriptRootFeature>();
             _defineVariablesFeature = Enable<DefineVariablesFeature>();
 
-            Options.Add("no-create", "If the database does not already exist, do not attempt to create it", v => _createIfMissing = false);
+            Options.Add("no-create", "If the database does not already exist, do not attempt to create it", _ => _createIfMissing = false);
 
             _loggingFeature = Enable<LoggingFeature>();
         }
@@ -36,10 +36,8 @@ namespace Datalust.Piggy.Cli.Commands
 
             try
             {
-                using (var connection = DatabaseConnector.Connect(_databaseFeature.Host, _databaseFeature.Database, _usernamePasswordFeature.Username, _usernamePasswordFeature.Password, _createIfMissing))
-                {
-                    UpdateSession.ApplyChangeScripts(connection, _scriptRootFeature.ScriptRoot, _defineVariablesFeature.Variables);
-                }
+                using var connection = DatabaseConnector.Connect(_databaseFeature.Host!, _databaseFeature.Database!, _usernamePasswordFeature.Username!, _usernamePasswordFeature.Password!, _createIfMissing);
+                UpdateSession.ApplyChangeScripts(connection, _scriptRootFeature.ScriptRoot!, _defineVariablesFeature.Variables);
 
                 return 0;
             }

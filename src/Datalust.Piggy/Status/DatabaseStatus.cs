@@ -16,7 +16,7 @@ namespace Datalust.Piggy.Status
 
             var changes = AppliedChangeScriptLog.GetAppliedChangeScripts(connection);
 
-            var applied = new HashSet<string>(changes.Select(m => m.ScriptFile));
+            var applied = new HashSet<string>(changes.Select(m => m.ScriptFile!));
             return ChangeScriptFileEnumerator.EnumerateInOrder(scriptRoot)
                 .Where(s => !applied.Contains(s.RelativeName))
                 .ToArray();

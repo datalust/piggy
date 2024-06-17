@@ -4,9 +4,9 @@ namespace Datalust.Piggy.Cli.Features
 {
     class UsernamePasswordFeature : CommandFeature
     {
-        public string Username { get; private set; }
+        public string? Username { get; private set; }
 
-        public string Password { get; private set; }
+        public string? Password { get; private set; }
 
         public override void Enable(OptionSet options)
         {

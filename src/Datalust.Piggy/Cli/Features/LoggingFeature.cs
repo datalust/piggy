@@ -6,7 +6,7 @@ namespace Datalust.Piggy.Cli.Features
 {
     class LoggingFeature : CommandFeature
     {
-        string _serverUrl, _apiKey;
+        string? _serverUrl, _apiKey;
         LogEventLevel _level = LogEventLevel.Information, _consoleLevel = LevelAlias.Minimum;
 
         public override void Enable(OptionSet options)

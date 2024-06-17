@@ -2,7 +2,7 @@
 {
     static class Requirement
     {
-        public static bool IsNonEmpty(string value)
+        public static bool IsNonEmpty(string? value)
         {
             return !string.IsNullOrWhiteSpace(value);
         }

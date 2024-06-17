@@ -23,16 +23,14 @@ namespace Datalust.Piggy.Cli.Commands
         protected override int Run()
         {
             _loggingFeature.Configure();
-
+            
             try
             {
-                using (var connection = DatabaseConnector.Connect(_databaseFeature.Host, _databaseFeature.Database,
-                    _usernamePasswordFeature.Username, _usernamePasswordFeature.Password, false))
+                using var connection = DatabaseConnector.Connect(_databaseFeature.Host!, _databaseFeature.Database!,
+                    _usernamePasswordFeature.Username!, _usernamePasswordFeature.Password!, false);
+                foreach (var applied in AppliedChangeScriptLog.GetAppliedChangeScripts(connection))
                 {
-                    foreach (var applied in AppliedChangeScriptLog.GetAppliedChangeScripts(connection))
-                    {
-                        Console.WriteLine($"{applied.AppliedAt:o} {applied.AppliedBy} {applied.ScriptFile}");
-                    }
+                    Console.WriteLine($"{applied.AppliedAt:o} {applied.AppliedBy} {applied.ScriptFile}");
                 }
 
                 return 0;

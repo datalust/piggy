@@ -1,24 +1,24 @@
-version: 1.0.{build}
+version: '{build}'
 skip_tags: true
-image: Visual Studio 2019
+image: Visual Studio 2022
 build_script:
 - ps: ./Build.ps1
 test: off
 artifacts:
-- path: artifacts/piggy-*.msi
-- path: artifacts/piggy-*.tar.gz
-- path: artifacts/Datalust.Piggy.*.nupkg
+- path: .artifacts/piggy-*.tar.gz
+- path: .artifacts/piggy-*.zip
+- path: .artifacts/Datalust.Piggy.*.nupkg
 deploy:
 - provider: NuGet
   api_key:
-    secure: ErGkGoLMaZtkFgFcBIFjNn3twXKxEhO27F7vQGlx0m7ouCV3XdgGdSNERZOmdLLw
+    secure: 0QScMsq2IR0gpicVnNS4mQlrcLVrjt/YXUYGDZzcx110LJ4fy1cEEyd5YMrhoH7U
   skip_symbols: true
   on:
-    branch: master
+    branch: /^(main|dev)$/
 - provider: GitHub
   auth_token:
     secure: Bo3ypKpKFxinjR9ShkNekNvkob2iklHJU+UlYyfHtcFFIAa58SV2TkEd0xWxz633
-  artifact: /piggy-.*\.(msi|tar\.gz)/
+  artifact: /piggy-.*\.(zip|tar\.gz)/
   tag: v$(appveyor_build_version)
   on:
-    branch: master
+    branch: main
